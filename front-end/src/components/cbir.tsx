@@ -34,7 +34,7 @@ function CBIR() {
     formData.append("file_upload", file as File);
 
     try {
-      const endPoint = ""; //isi sesuai endpoint back end
+      const endPoint = "http://localhost:8000/uploadfile/"; //isi sesuai endpoint back end
       const res = await fetch(endPoint, {
         method: "POST",
         body: formData,
@@ -61,7 +61,7 @@ function CBIR() {
     });
 
     try {
-      const endPoint = ""; //isi sesuai endpoint back end
+      const endPoint = "http://localhost:8000/uploadfile/"; //isi sesuai endpoint back end
       const res = await fetch(endPoint, {
         method: "POST",
         body: formData,
