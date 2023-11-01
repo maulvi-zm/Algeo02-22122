@@ -1,10 +1,10 @@
 "use client";
 
-import { Switch } from "./ui/switch";
 import React from "react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 
 function CBIR() {
   const [file, setFile] = React.useState<File | null>(null);
@@ -61,7 +61,7 @@ function CBIR() {
     });
 
     try {
-      const endPoint = "http://localhost:8000/uploadfile/"; //isi sesuai endpoint back end
+      const endPoint = "http://localhost:8000/uploaddata/"; //isi sesuai endpoint back end
       const res = await fetch(endPoint, {
         method: "POST",
         body: formData,
