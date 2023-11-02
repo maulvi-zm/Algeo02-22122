@@ -11,6 +11,7 @@ const navItems: navItems[] = [
   { name: "Home", href: "/" },
   { name: "CBIR", href: "/cbir" },
   { name: "About Us", href: "/about" },
+  { name: "Camera", href: "/camera" },
 ];
 
 function NavBar() {
