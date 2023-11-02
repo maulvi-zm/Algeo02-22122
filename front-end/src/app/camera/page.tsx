@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 function App() {
     const [videoReady, setVideoReady] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const mediaStream = useRef<MediaStream | null>(null);
 
     useEffect(() => {
         const captureFrame = async () => {
@@ -15,10 +16,19 @@ function App() {
                     videoRef.current.onloadeddata = () => {
                         setVideoReady(true);
                     };
+                    mediaStream.current = stream;
                 }
             } catch (err) {
                 console.error('Error accessing camera:', err);
             }
+
+            return () => {
+                if (mediaStream.current) {
+                    mediaStream.current.getTracks().forEach((track) => {
+                        track.stop(); // Close the camera stream when leaving the page
+                    });
+                }
+            };
         };
         captureFrame();
 
@@ -29,7 +39,14 @@ function App() {
         const interval = setInterval(intervalFunction, 5000);
 
         // Clear the interval when the component unmounts
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(interval);
+            if (mediaStream.current) {
+                mediaStream.current.getTracks().forEach((track) => {
+                    track.stop();
+                });
+            }
+        };
     }, [videoReady, videoRef]);
 
     const takeSnapshot = () => {
@@ -86,13 +103,6 @@ function App() {
             }, 'image/jpeg', 0.8);
         }
       };
-      
-    
-    
-    
-    
-    
-    
 
     return (
         <div>
