@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from fastapi.responses import StreamingResponse
@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 import requests
 from bs4 import BeautifulSoup
 import os
-import caches
+from ExportPDF import export_pdf
 
 UPLOAD_DIR_SEARCH = Path() / "uploads/search"
 UPLOAD_DIR_DATA= Path() / "uploads/data-set"
@@ -82,6 +82,18 @@ async def scrape_images(link: str):
         print("Failed to fetch the webpage")
 
     return {"message": "Images scraped and saved to uploads/data-set"}
+
+@app.get("/download_pdf")
+async def download_pdf(response: Response):
+    export_pdf()
+    
+    response.headers["Content-Disposition"] = "attachment; filename=template-output.pdf"
+    response.headers["Content-Type"] = "application/pdf"
+
+    with open("template-output.pdf", "rb") as file:
+        pdf = file.read()
+        return Response(content=pdf, media_type="application/pdf")
+    
 
 def delete_dataset():
     for file in os.listdir(UPLOAD_DIR_DATA):
