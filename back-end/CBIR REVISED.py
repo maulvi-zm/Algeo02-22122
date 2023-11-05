@@ -49,7 +49,7 @@ def RGB2HSV(r, g, b):
     h = h_temp
 
     # Saturation calculation
-    s = np.where(cmax != 0, delta / cmax, s)
+    s = np.where(cmax != 0, delta / cmax, 0)
     s[~np.isfinite(s)] = 0
 
     # Value calculation
