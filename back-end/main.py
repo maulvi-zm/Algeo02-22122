@@ -1,13 +1,20 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
-import cv2
-import time
+from fastapi.responses import StreamingResponse
+from io import BytesIO
+from fastapi.staticfiles import StaticFiles
 
 UPLOAD_DIR_SEARCH = Path() / "uploads/search"
 UPLOAD_DIR_DATA= Path() / "uploads/data-set"
 
 app = FastAPI()
+
+data_set_directory = Path(__file__).parent / "uploads/data-set"
+
+# Mount the 'uploads/data-set' directory at '/uploads/data-set' for serving static files
+app.mount("/uploads/data-set", StaticFiles(directory=data_set_directory), name="data-set")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
