@@ -1,42 +1,80 @@
-import jinja2
+from jinja2 import Template
 import pdfkit
+import json
+from CBIR_REVISED import Cbir_Color
 
 TEMPLATE_FILE = "PDF.html"
 
-def export_pdf(sum, time, list_image, list_percentage):
-    
-    # Dummy data
-    sum = 3
-    time = 0.5
-    
-    # ! HARDCODED
-    #TODO : Change to dynamic
-    context = {
-        'Image1': "D:/IF2121_TB_02/back-end" + "/uploads/data-set/1.jpg",
-        'Image2': "D:/IF2121_TB_02/back-end" + "/uploads/data-set/2.jpg",
-        'Image3': "D:/IF2121_TB_02/back-end" + "/uploads/data-set/3.jpg",
-        'Percentage1': "50%",
-        'Percentage2': "50%",
-        'Percentage3': "50%",
-        'sum_image' : f'{sum}',
-        'time' : f'{time}',
-    }
-    
-    # Get the template
-    templateLoader = jinja2.FileSystemLoader("./")
-    templateEnv = jinja2.Environment(loader=templateLoader)
-    template = templateEnv.get_template(TEMPLATE_FILE)
+def export_pdf():
+    similarity_arr, time = Cbir_Color()
 
-    outputText = template.render(context)
+    # Gathering image data
+    image_objects = []
+    for item in similarity_arr:
+        image_objects.append({
+            "url": f"D:/IF2121_TB_02/back-end/uploads/data-set/{item['url']}",
+            "percentage": item["percentage"]
+        })
 
+    # Adding total time executed information
+    image_objects.append({
+        "url": "Total Execution Time:",
+        "percentage": f"{time} seconds"
+    })
+
+    template_html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+            .image {
+                width: 200px;
+                height: 200px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Image Data</h1>
+        <table>
+            <tr>
+                <th>URL</th>
+                <th>Percentage</th>
+            </tr>
+            {% for item in data %}
+            <tr>
+                <td>{% if "Total Execution Time" in item.url %}
+                    <strong>{{ item.url }}</strong>
+                    {% else %}
+                    <img src="{{ item.url }}" alt="Image1" class="image">
+                    {% endif %}
+                </td>
+                <td>{{ item.percentage }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+    </html>
+    """
+
+    # Load the template
+    template = Template(template_html)
     options = {
         'page-size': 'A4',
-        'enable-local-file-access': None,
+        'encoding': "UTF-8",
+        'enable-local-file-access': '',
     }
-    
-    config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
 
-    # Convert to PDF
-    pdfkit.from_string(outputText, 'template-output.pdf', configuration=config, options=options, css="./PDFC.css")
+    # Render the template with the JSON data
+    rendered_content = template.render(data=image_objects)
 
-
+    # Generate PDF
+    pdfkit.from_string(rendered_content, 'template-output.pdf', options=options)
