@@ -1,13 +1,13 @@
 from fastapi import FastAPI, UploadFile, File, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
-from fastapi.responses import StreamingResponse
-from io import BytesIO
 from fastapi.staticfiles import StaticFiles
 import requests
 from bs4 import BeautifulSoup
 import os
 from ExportPDF import export_pdf
+from urllib.parse import urljoin
+from CBIR_REVISED import Cbir_Color
 
 UPLOAD_DIR_SEARCH = Path() / "uploads/search"
 UPLOAD_DIR_DATA= Path() / "uploads/data-set"
@@ -62,26 +62,46 @@ async def receive_image(file: UploadFile = File(...)):
 @app.get("/scrape")
 async def scrape_images(link: str):
     delete_dataset()
-    response = requests.get(link)
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36",
+    "Accept-Language": "en-US,en;q=0.5",}
+    response = requests.get(url=link, headers=headers)
     if response.status_code == 200:
-        
-        soup = BeautifulSoup(response.content, 'html.parser')
+        soup = BeautifulSoup(response.text, 'html.parser')
         image_tags = soup.find_all('img')
         os.makedirs(UPLOAD_DIR_DATA, exist_ok=True)
         
-        for index, img in enumerate(image_tags):
+        for index, img in enumerate(soup.find_all('img')):
             img_link = img.get('src')
-            
             if img_link:
-                img_response = requests.get(img_link)
+                if not img_link.startswith(('http://', 'https://')):
+                    complete_url = urljoin(link, img_link)
+                else:
+                    complete_url = img_link
+                
+                img_response = requests.get(complete_url)
                 
                 if img_response.status_code == 200:
                     with open(os.path.join(UPLOAD_DIR_DATA, f"{index}.jpg"), 'wb') as f:
                         f.write(img_response.content)
     else:
-        print("Failed to fetch the webpage")
+        return {"message": "failed to scrape images"}
 
     return {"message": "Images scraped and saved to uploads/data-set"}
+        
+@app.get("/get-result")
+async def send_result():
+    similarity_arr, time = Cbir_Color()
+    image_objects = []
+    for item in similarity_arr:
+        image_objects.append({
+            "url": f"http://localhost:8000/uploads/data-set/{item['url']}",
+            "percentage": item["percentage"]
+        })
+    
+    return {
+        "data": image_objects,
+        "time": time,
+    }
 
 @app.get("/download_pdf")
 async def download_pdf(response: Response):
