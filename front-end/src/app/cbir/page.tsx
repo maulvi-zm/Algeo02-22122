@@ -1,21 +1,11 @@
 "use client";
 
 import Glass from "@/components/ui/glassmorphism";
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import ImageInput from "./image-input";
 import DatasetInput from "@/components/dataset-input";
 import RainbowTitle from "@/components/ui/rainbow-title";
-import Result from "./result";
-
-interface ImageData {
-  url: string;
-  percentage: number;
-}
-
-interface JsonData {
-  data: ImageData[];
-  time: number;
-}
+import Results, { JsonData } from "@/components/result";
 
 const initialData: JsonData = {
   data: [],
@@ -132,17 +122,7 @@ function CBIR() {
         handleChangeMultiple={handleChangeMultiple}
       />
 
-      <div className='w-[80%]'>
-        <div className='w-full flex justify-between'>
-          <RainbowTitle title='Result' />
-          <RainbowTitle
-            title={`${resultData.data.length} result in ${resultData.time}`}
-          />
-        </div>
-        <Glass>
-          <Result data={resultData} />
-        </Glass>
-      </div>
+      <Results data={resultData} />
     </>
   );
 }
