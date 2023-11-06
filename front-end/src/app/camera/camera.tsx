@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Filter from "./filter";
 
 function CameraVid() {
   const [videoReady, setVideoReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [snapshot, setSnapshot] = useState<string | null>(null);
   const mediaStream = useRef<MediaStream | null>(null);
 
   useEffect(() => {
@@ -35,10 +37,19 @@ function CameraVid() {
     captureFrame();
 
     const intervalFunction = () => {
-      takeSnapshot();
+      let count = 5;
+      const countdownInterval = setInterval(() => {
+        if (count > 0) {
+          console.log(`Snapshot in ${count}`);
+          count--;
+        } else {
+          clearInterval(countdownInterval);
+          takeSnapshot();
+        }
+      }, 1000); // Interval set to 1 second
     };
 
-    const interval = setInterval(intervalFunction, 5000);
+    const interval = setInterval(intervalFunction, 6000); //6 seconds biar sama kaya filter
 
     return () => {
       clearInterval(interval);
@@ -88,6 +99,13 @@ function CameraVid() {
             return;
           }
 
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = () => {
+            const dataUrl = reader.result as string;
+            setSnapshot(dataUrl); // Save image di state
+          };
+
           const formData = new FormData();
           formData.append("file", blob, "snapshot.jpg");
 
@@ -110,13 +128,28 @@ function CameraVid() {
   };
 
   return (
-    <div className='rounded-xl overflow-hidden w-fit'>
-      <video
-        ref={videoRef}
-        autoPlay
-        playsInline
-        className='w-[512px] h-[512px] object-cover'
-      />
+    <div className='flex gap-10'>
+      <div className='rounded-xl overflow-hidden w-[512px] h-[512px] '>
+        {videoReady ? <Filter /> : null}
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          className='w-[512px] h-[512px] object-cover'
+        />
+      </div>
+
+      <div className='rounded-xl w-[512px] h-[512px] flex justify-center items-center'>
+        {snapshot ? (
+          <img
+            src={snapshot}
+            alt='Snapshot'
+            className='w-[512px] h-[512px] object-cover rounded-xl'
+          />
+        ) : (
+          <p className='text-[24px] font-semibold text-center'>Please Wait</p>
+        )}
+      </div>
     </div>
   );
 }

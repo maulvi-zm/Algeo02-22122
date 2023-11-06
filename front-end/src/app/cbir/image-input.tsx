@@ -6,42 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 
-function ImageInput() {
-  const [file, setFile] = React.useState<File | null>(null);
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    console.log(e.target.files);
-
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-
-    formData.append("file_upload", file as File);
-
-    try {
-      const endPoint = "http://localhost:8000/uploadfile/"; //isi sesuai endpoint back end
-      const res = await fetch(endPoint, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        console.log(data);
-      } else {
-        console.log("Upload error");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
+function ImageInput({
+  file,
+  handleSubmit,
+  handleChange,
+}: {
+  file: File | null;
+  handleSubmit: any;
+  handleChange: any;
+}) {
   return (
     <>
       <div className='h-full w-[50%] place-self-center rounded-lg'>
