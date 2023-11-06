@@ -20,7 +20,7 @@ export default function Home() {
             <path
               d='M310.057 1133.1C-155.282 279.048 670.13 242.015 1194.5 279.048M2042 64.5C1851.49 454.12 1610.97 308.461 1194.5 279.048M1194.5 279.048C1417.27 786.239 2315.65 1388.55 426.5 1151'
               stroke='url(#paint0_linear_1_3)'
-              stroke-width='842.177'
+              strokeWidth='842.177'
             />
           </g>
           <defs>
@@ -31,9 +31,9 @@ export default function Home() {
               width='3481.64'
               height='2589.75'
               filterUnits='userSpaceOnUse'
-              color-interpolation-filters='sRGB'
+              colorInterpolationFilters='sRGB'
             >
-              <feFlood flood-opacity='0' result='BackgroundImageFix' />
+              <feFlood floodOpacity='0' result='BackgroundImageFix' />
               <feBlend
                 mode='normal'
                 in='SourceGraphic'
@@ -53,10 +53,10 @@ export default function Home() {
               y2='118.206'
               gradientUnits='userSpaceOnUse'
             >
-              <stop stop-color='#FC833F' />
-              <stop offset='0.208333' stop-color='#FD5E5E' />
-              <stop offset='0.432292' stop-color='#EC5CF9' />
-              <stop offset='1' stop-color='#5194E2' />
+              <stop stopColor='#FC833F' />
+              <stop offset='0.208333' stopColor='#FD5E5E' />
+              <stop offset='0.432292' stopColor='#EC5CF9' />
+              <stop offset='1' stopColor='#5194E2' />
             </linearGradient>
           </defs>
         </svg>

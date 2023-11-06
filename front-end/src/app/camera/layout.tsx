@@ -17,7 +17,7 @@ export default function Layout({
             <path
               d='M1089.5 1838C-118.916 3453.77 3546.1 238.911 629.901 912.661C-93.5103 2119.17 127.976 -1650.84 208.5 158C285.126 213.211 -1230.08 1302.3 -682 1310.5'
               stroke='url(#paint0_linear_103_3)'
-              stroke-width='889.421'
+              strokeWidth='889.421'
             />
           </g>
           <defs>
@@ -28,9 +28,9 @@ export default function Layout({
               width='4078.14'
               height='4129.87'
               filterUnits='userSpaceOnUse'
-              color-interpolation-filters='sRGB'
+              colorInterpolationFilters='sRGB'
             >
-              <feFlood flood-opacity='0' result='BackgroundImageFix' />
+              <feFlood floodOpacity='0' result='BackgroundImageFix' />
               <feBlend
                 mode='normal'
                 in='SourceGraphic'
@@ -50,10 +50,10 @@ export default function Layout({
               y2='-353.211'
               gradientUnits='userSpaceOnUse'
             >
-              <stop stop-color='#94DEE9' />
-              <stop offset='0.333333' stop-color='#3CFE8A' />
-              <stop offset='0.666667' stop-color='#84FB79' />
-              <stop offset='1' stop-color='#A6EF93' />
+              <stop stopColor='#94DEE9' />
+              <stop offset='0.333333' stopColor='#3CFE8A' />
+              <stop offset='0.666667' stopColor='#84FB79' />
+              <stop offset='1' stopColor='#A6EF93' />
             </linearGradient>
           </defs>
         </svg>
