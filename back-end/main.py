@@ -16,7 +16,6 @@ app = FastAPI()
 
 data_set_directory = Path(__file__).parent / "uploads/data-set"
 
-# Mount the 'uploads/data-set' directory at '/uploads/data-set' for serving static files
 app.mount("/uploads/data-set", StaticFiles(directory=data_set_directory), name="data-set")
 
 app.add_middleware(

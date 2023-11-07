@@ -10,9 +10,9 @@ def export_pdf():
 
     # Gathering image data
     image_objects = []
-    for item in similarity_arr:
+    for item in similarity_arr[1:]:
         image_objects.append({
-            "url": f"D:/IF2121_TB_02/back-end/uploads/data-set/{item['url']}",
+            "url": f"D:/IF2121_TB_02/back-end/uploads{item['url']}",
             "percentage": item["percentage"]
         })
 
