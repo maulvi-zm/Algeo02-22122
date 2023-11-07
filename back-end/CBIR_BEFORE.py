@@ -1,9 +1,14 @@
 import glob
 import time
-import caches
+import caches2
 import os
 import cv2
 import numpy as np
+import pstats
+import cProfile
+from multiprocessing import Pool
+
+
 
 def color_quantization(h, s, v, hist, iteration):
     h_ranges = np.array([(316, 360), (0, 25), (26, 40), (41, 120), (121, 190), (191, 270), (271, 295), (296, 315)])
@@ -68,7 +73,6 @@ def calculate_similarity(hist1, hist2):
 
 def histogram_array(img,hists):
     height, width, _ = img.shape
-    
 
     grid_height = height // 3
     grid_width = width // 3
@@ -90,6 +94,7 @@ def histogram_array(img,hists):
 
     return hists  
 
+
     
 OUTPUT_FOLDER = "./output"
 INPUT_FOLDER = "./uploads/search"
@@ -98,22 +103,22 @@ DATASET_FOLDER = "./uploads/data-set"
 
 def Cbir_Color():
     program_time = time.time()
-    cache = caches.csv_to_array()
+    cache = caches2.json_to_dict()
+    similarity_arr = []
 
     for folder in [INPUT_FOLDER, DATASET_FOLDER]:
         image_files = glob.glob(os.path.join(folder, '*.jpg'))
         for image_path in sorted(image_files):
             if os.path.isfile(image_path):
                 
-                start_time = time.time()
                 # Check Caches
-                found, index = caches.cek_cache(cache, image_path)
+                found, index = caches2.cek_cache(cache, image_path)
                 
                 if found:
                     if folder == INPUT_FOLDER:
-                        histogram1 = cache[index][2]
+                        histogram1 = index
                     else:
-                        histogram2 = cache[index][2]
+                        histogram2 = index
                 else:
                     img = cv2.imread(str(image_path))
 
@@ -127,23 +132,26 @@ def Cbir_Color():
                     else:
                         histogram2 = histogram
 
-                    caches.input_to_csv(cache, [caches.hash_function(caches.hash_file(image_path)), caches.hash_file(image_path), caches.np_to_list(histogram)])
+                    caches2.input_to_json(cache, [caches2.hash_file(image_path), caches2.np_to_list(histogram)])
                 
                 if folder == DATASET_FOLDER:
                     if type(histogram1) != list:
-                        histogram1 = caches.np_to_list(histogram1)
+                        histogram1 = caches2.np_to_list(histogram1)
                     if type(histogram2) != list:
-                        histogram2 = caches.np_to_list(histogram2)
+                        histogram2 = caches2.np_to_list(histogram2)
                         
                     similarity = calculate_similarity(histogram1, histogram2)
-                    print(f"Similarity: {similarity}")
-                    end_time = time.time()
-                    execution_time = end_time - start_time
-                    print(f"Processed {image_path} in {execution_time} seconds.")
+                    similarity_arr.append({
+                        "url": os.path.basename(image_path),
+                        "percentage": similarity
+                    })
                     
-
-    caches.array_to_csv(cache)
+    similarity_arr = sorted(similarity_arr, key=lambda k: k['percentage'], reverse=True)
+    caches2.dict_to_json(cache, "./caches/data.json")
     execution_time = time.time() - program_time
-    print(f"Program executed in {execution_time} seconds.")
-    
-Cbir_Color()
+    return similarity_arr, execution_time
+
+if __name__ == "__main__":
+    cProfile.run("Cbir_Color()", "my_func_stats")
+    p = pstats.Stats("my_func_stats")
+    p.sort_stats("cumulative").print_stats()
