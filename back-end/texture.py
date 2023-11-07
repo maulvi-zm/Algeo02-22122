@@ -87,8 +87,14 @@ def ExtractHomogeneity(glcm_matrix):
     homogeneity = np.sum(glcm_matrix / (1 + (indices[:, None] - indices[None, :]) ** 2))
     return homogeneity
 
+def ExtractDissimilarity(glcm_matrix):
+    dimension = 256
+    indices = np.arange(dimension)
+    homogeneity = np.sum(glcm_matrix * abs(indices[:, None] - indices[None, :]))
+    return homogeneity
+
 def ExtractEntropy(glcm_matrix):
-    epsilon = 1e-8  # small epsilon value
+    epsilon = 1e-8  #avoid log 0 
     masked_glcm = np.where(glcm_matrix == 0, epsilon, glcm_matrix)
     entropy = -np.sum(masked_glcm * np.log10(masked_glcm))
     return entropy
@@ -99,7 +105,7 @@ def Vector(image_path, angle):
     glcm_sym = Symmetrix(glcm)
     glcm_norm = GLCMNorm(glcm_sym)
 
-    vector = [ExtractContrast(glcm_norm), ExtractHomogeneity(glcm_norm), ExtractEntropy(glcm_norm)]
+    vector = [ExtractContrast(glcm_norm), ExtractHomogeneity(glcm_norm), ExtractEntropy(glcm_norm), ExtractDissimilarity(glcm_norm)]
 
     return vector
 
@@ -128,6 +134,3 @@ def Procedure(image_path1, image_path2):
     duration = time.time() - start_time
 
     return [cosineTotal, duration]
-
-
-print(Procedure("white.jpg", "black.jpg"))
