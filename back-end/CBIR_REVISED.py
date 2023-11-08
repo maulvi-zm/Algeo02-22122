@@ -99,8 +99,6 @@ def histogram_array_parallel(image_paths, cache):
 
 def histogram_array(img,hists):
     height, width, _ = img.shape
-    
-
     grid_height = height // 3
     grid_width = width // 3
 
@@ -112,13 +110,9 @@ def histogram_array(img,hists):
             end_w = (j + 1) * grid_width
 
             grid = img[start_h:end_h, start_w:end_w]
-
             r, g, b = grid[:, :, 0], grid[:, :, 1], grid[:, :, 2]
-
             h, s, v = RGB2HSV(r, g, b)
-
             color_quantization(h, s, v, hists, iteration = i * 3 + j)
-
     return hists  
 
 
@@ -137,14 +131,15 @@ def Cbir_Color():
     histograms = histogram_array_parallel(image_paths=image_files,cache=cache)
     for histogram in histograms[1:]:
         similarity = calculate_similarity(histograms[0], histogram)
-        similarity_arr.append({
-            "url": image_files[histograms.index(histogram)].replace("./uploads", ""),
-            "percentage": similarity
-        })
+        if similarity > 60:
+            similarity_arr.append({
+                "url": image_files[histograms.index(histogram)].replace("./uploads", ""),
+                "percentage": similarity
+            })
         caches2.input_to_json(cache, [caches2.hash_file(image_files[histograms.index(histogram)]), histogram])
         
     similarity_arr = sorted(similarity_arr, key=lambda k: k['percentage'], reverse=True)
-    # caches2.dict_to_json(cache, "./caches/data.json")
+    caches2.dict_to_json(cache, "./caches/data.json")
     execution_time = time.time() - program_time
     return similarity_arr, execution_time
 

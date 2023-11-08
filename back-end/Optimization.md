@@ -121,4 +121,13 @@ Tue Nov  7 13:48:03 2023    my_func_stats
 
          82140 function calls (81933 primitive calls) in 1.653 seconds\
 
-- cache
+# Final Optimization (dataset = 4737)
+- Cache
+Tue Nov  7 15:41:51 2023    my_func_stats
+
+         319412 function calls (319205 primitive calls) in 54.169 seconds
+
++ Cache
+Tue Nov  7 15:43:43 2023    my_func_stats
+
+         314680 function calls (314473 primitive calls) in 3.553 seconds
