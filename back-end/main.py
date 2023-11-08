@@ -86,7 +86,8 @@ async def scrape_images(link: str):
         return {"message": "failed to scrape images"}
 
     return {"message": "Images scraped and saved to uploads/data-set"}
-        
+
+
 @app.get("/get-result")
 async def send_result():
     similarity_arr, time = Cbir_Color()
