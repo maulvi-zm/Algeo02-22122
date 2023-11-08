@@ -91,7 +91,7 @@ async def scrape_images(link: str):
 async def send_result():
     similarity_arr, time = Cbir_Color()
     image_objects = []
-    for item in similarity_arr[1:]:
+    for item in similarity_arr:
         image_objects.append({
             "url": f"http://localhost:8000/uploads/data-set{item['url']}",
             "percentage": item["percentage"]
