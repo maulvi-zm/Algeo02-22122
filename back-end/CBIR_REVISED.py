@@ -137,14 +137,15 @@ def Cbir_Color():
     histograms = histogram_array_parallel(image_paths=image_files,cache=cache)
     for histogram in histograms[1:]:
         similarity = calculate_similarity(histograms[0], histogram)
-        similarity_arr.append({
-            "url": image_files[histograms.index(histogram)].replace("./uploads", ""),
-            "percentage": similarity
-        })
+        if (similarity > 60):
+            similarity_arr.append({
+                "url": image_files[histograms.index(histogram)].replace("./uploads/data-set", ""),
+                "percentage": similarity
+            })
         caches2.input_to_json(cache, [caches2.hash_file(image_files[histograms.index(histogram)]), histogram])
         
     similarity_arr = sorted(similarity_arr, key=lambda k: k['percentage'], reverse=True)
-    # caches2.dict_to_json(cache, "./caches/data.json")
+    caches2.dict_to_json(cache, "./caches/data.json")
     execution_time = time.time() - program_time
     return similarity_arr, execution_time
 
