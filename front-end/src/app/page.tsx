@@ -1,5 +1,4 @@
 import CameraImage from "@/assets/images/camera.png";
-import BgHome from "@/assets/background/bg-home.png";
 import Image from "next/image";
 import RainbowTitle from "@/components/ui/rainbow-title";
 import Glass from "@/components/ui/glassmorphism";
@@ -8,59 +7,6 @@ export default function Home() {
   return (
     <main className='flex h-auto flex-col justify-between p-24 relative gap-10'>
       <div className='absolute -z-10 top-0 left-0 w-full h-full'>
-        {/* <svg
-          // width='1920'
-          // height='1080'
-          // viewBox='0 0 1920 1080'
-          className='w-full h-full object-cover'
-          fill='none'
-          xmlns='http://www.w3.org/2000/svg'
-        >
-          <g filter='url(#filter0_f_1_3)'>
-            <path
-              d='M310.057 1133.1C-155.282 279.048 670.13 242.015 1194.5 279.048M2042 64.5C1851.49 454.12 1610.97 308.461 1194.5 279.048M1194.5 279.048C1417.27 786.239 2315.65 1388.55 426.5 1151'
-              stroke='url(#paint0_linear_1_3)'
-              strokeWidth='842.177'
-            />
-          </g>
-          <defs>
-            <filter
-              id='filter0_f_1_3'
-              x='-654.805'
-              y='-557.759'
-              width='3481.64'
-              height='2589.75'
-              filterUnits='userSpaceOnUse'
-              colorInterpolationFilters='sRGB'
-            >
-              <feFlood floodOpacity='0' result='BackgroundImageFix' />
-              <feBlend
-                mode='normal'
-                in='SourceGraphic'
-                in2='BackgroundImageFix'
-                result='shape'
-              />
-              <feGaussianBlur
-                stdDeviation='203.274'
-                result='effect1_foregroundBlur_1_3'
-              />
-            </filter>
-            <linearGradient
-              id='paint0_linear_1_3'
-              x1='1693.93'
-              y1='1101.69'
-              x2='169.266'
-              y2='118.206'
-              gradientUnits='userSpaceOnUse'
-            >
-              <stop stopColor='#FC833F' />
-              <stop offset='0.208333' stopColor='#FD5E5E' />
-              <stop offset='0.432292' stopColor='#EC5CF9' />
-              <stop offset='1' stopColor='#5194E2' />
-            </linearGradient>
-          </defs>
-        </svg> */}
-
         <svg
           width='1440'
           height='2000'

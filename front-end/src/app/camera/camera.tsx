@@ -2,12 +2,14 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Filter from "./filter";
+import { useToast } from "@/components/ui/use-toast";
 
 function CameraVid() {
   const [videoReady, setVideoReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [snapshot, setSnapshot] = useState<string | null>(null);
   const mediaStream = useRef<MediaStream | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     const captureFrame = async () => {
@@ -40,7 +42,6 @@ function CameraVid() {
       let count = 5;
       const countdownInterval = setInterval(() => {
         if (count > 0) {
-          console.log(`Snapshot in ${count}`);
           count--;
         } else {
           clearInterval(countdownInterval);
@@ -118,7 +119,11 @@ function CameraVid() {
               console.log("Image sent to the server:", data);
             })
             .catch((error) => {
-              console.error("Error sending image:", error);
+              toast({
+                title: "Something Went Wrong!",
+                description: "Please try again later",
+                variant: "destructive",
+              });
             });
         },
         "image/jpeg",

@@ -4,10 +4,12 @@ import Glass from "@/components/ui/glassmorphism";
 import CameraVid from "./camera";
 import DatasetInput from "@/components/dataset-input";
 import React from "react";
-import Results, { JsonData } from "@/components/result";
+import Results from "@/components/result";
+import { useToast } from "@/components/ui/use-toast";
 
 function Camera() {
   const [selectedData, setSelectedData] = React.useState<File[]>([]);
+  const { toast } = useToast();
 
   function handleChangeMultiple(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
@@ -32,13 +34,24 @@ function Camera() {
       });
 
       if (res.ok) {
-        const data = await res.json();
-        console.log(data);
+        toast({
+          title: "File Submitted Successfully!",
+          description: "Please continue to submit the data set.",
+          variant: "success",
+        });
       } else {
-        console.log("Upload error");
+        toast({
+          title: "Something Went Wrong!",
+          description: "Please try again later",
+          variant: "destructive",
+        });
       }
     } catch (err) {
-      console.log(err);
+      toast({
+        title: "Something Went Wrong!",
+        description: "Please try again later",
+        variant: "destructive",
+      });
     }
   };
   return (

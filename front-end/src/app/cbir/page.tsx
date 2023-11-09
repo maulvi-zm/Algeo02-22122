@@ -1,15 +1,17 @@
 "use client";
 
 import Glass from "@/components/ui/glassmorphism";
-import React, { useEffect } from "react";
+import React from "react";
 import ImageInput from "./image-input";
 import DatasetInput from "@/components/dataset-input";
 import RainbowTitle from "@/components/ui/rainbow-title";
-import Results, { JsonData } from "@/components/result";
+import Results from "@/components/result";
+import { useToast } from "@/components/ui/use-toast";
 
 function CBIR() {
   const [file, setFile] = React.useState<File | null>(null);
   const [selectedData, setSelectedData] = React.useState<File[]>([]);
+  const { toast } = useToast();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files[0]) {
@@ -32,13 +34,24 @@ function CBIR() {
       });
 
       if (res.ok) {
-        const data = await res.json();
-        console.log(data);
+        toast({
+          title: "File Submitted Successfully!",
+          description: "Please continue to submit the data set.",
+          variant: "success",
+        });
       } else {
-        console.log("Upload error");
+        toast({
+          title: "Something Went Wrong!",
+          description: "Please try again later",
+          variant: "destructive",
+        });
       }
     } catch (err) {
-      console.log(err);
+      toast({
+        title: "Something Went Wrong!",
+        description: "Please try again later",
+        variant: "destructive",
+      });
     }
   };
 
@@ -65,13 +78,24 @@ function CBIR() {
       });
 
       if (res.ok) {
-        const data = await res.json();
-        console.log(data);
+        toast({
+          title: "File Submitted Successfully!",
+          description: "Please continue to next section to see the results",
+          variant: "success",
+        });
       } else {
-        console.log("Upload error");
+        toast({
+          title: "Something Went Wrong!",
+          description: "Please try again later",
+          variant: "destructive",
+        });
       }
     } catch (err) {
-      console.log(err);
+      toast({
+        title: "Something Went Wrong!",
+        description: "Please try again later",
+        variant: "destructive",
+      });
     }
   };
 

@@ -5,6 +5,7 @@ import RenderResult from "./render-result";
 import { Button } from "./ui/button";
 import Loading from "./ui/loading";
 import { Switch } from "./ui/switch";
+import { useToast } from "./ui/use-toast";
 
 export interface ImageData {
   url: string;
@@ -26,32 +27,42 @@ const color: string = "http://localhost:8000/get-result-color";
 
 function Results() {
   const [resultData, setResultData] = React.useState<JsonData>(initialData);
-  const [type, setType] = React.useState<string>("color");
+  const type = React.useRef<string>(color);
   const [Load, setLoad] = React.useState<boolean>(false);
   const length = resultData.data.length;
+  const { toast } = useToast();
 
   const fetchData = async () => {
     try {
       setLoad(true);
-      const response = await fetch("http://localhost:8000/get-result"); // Ganti URL dengan URL yang sesuai
+      const response = await fetch(type.current); // Ganti URL dengan URL yang sesuai
       if (!response.ok) {
+        toast({
+          title: "Something Went Wrong!",
+          description: "Please try again later",
+          variant: "destructive",
+        });
         throw new Error("Network response was not ok");
       }
       const jsonData = await response.json();
 
       setResultData(jsonData);
     } catch (error) {
-      console.error(error);
+      toast({
+        title: "Something Went Wrong!",
+        description: "Please try again later",
+        variant: "destructive",
+      });
     } finally {
       setLoad(false);
     }
   };
 
   const handleClick = () => {
-    if (type === "color") {
-      setType("texture");
+    if (type.current === color) {
+      type.current = texture;
     } else {
-      setType("color");
+      type.current = color;
     }
   };
 
