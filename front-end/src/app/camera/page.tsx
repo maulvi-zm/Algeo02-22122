@@ -4,6 +4,7 @@ import Glass from "@/components/ui/glassmorphism";
 import CameraVid from "./camera";
 import DatasetInput from "@/components/dataset-input";
 import React from "react";
+import Results, { JsonData } from "@/components/result";
 
 function Camera() {
   const [selectedData, setSelectedData] = React.useState<File[]>([]);
@@ -53,6 +54,8 @@ function Camera() {
         submitData={submitData}
         handleChangeMultiple={handleChangeMultiple}
       />
+
+      <Results />
     </>
   );
 }

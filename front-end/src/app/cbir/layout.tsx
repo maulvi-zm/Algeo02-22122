@@ -1,3 +1,5 @@
+import CbirBG from "@/components/background/cbir";
+
 export default function CbirLayout({
   children, // will be a page or nested layout
 }: {
@@ -6,7 +8,7 @@ export default function CbirLayout({
   return (
     <main className='flex min-h-screen flex-col items-center justify-between p-24 relative gap-10'>
       <div className='absolute -z-10 top-0 left-0 w-full h-full object-cover'>
-        <svg
+        {/* <svg
           className='w-full h-full'
           fill='none'
           xmlns='http://www.w3.org/2000/svg'
@@ -60,7 +62,8 @@ export default function CbirLayout({
               <rect width='1440' height='1916' fill='white' />
             </clipPath>
           </defs>
-        </svg>
+        </svg> */}
+        <CbirBG />
       </div>
 
       {children}

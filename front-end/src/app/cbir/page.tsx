@@ -7,29 +7,9 @@ import DatasetInput from "@/components/dataset-input";
 import RainbowTitle from "@/components/ui/rainbow-title";
 import Results, { JsonData } from "@/components/result";
 
-const initialData: JsonData = {
-  data: [],
-  time: 0,
-};
-
 function CBIR() {
   const [file, setFile] = React.useState<File | null>(null);
   const [selectedData, setSelectedData] = React.useState<File[]>([]);
-  const [resultData, setResultData] = React.useState<JsonData>(initialData);
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch("http://localhost:8000/get-result"); // Ganti URL dengan URL yang sesuai
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const jsonData = await response.json();
-
-      setResultData(jsonData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files[0]) {
@@ -60,8 +40,6 @@ function CBIR() {
     } catch (err) {
       console.log(err);
     }
-
-    fetchData();
   };
 
   function handleChangeMultiple(e: React.ChangeEvent<HTMLInputElement>) {
@@ -95,13 +73,7 @@ function CBIR() {
     } catch (err) {
       console.log(err);
     }
-
-    fetchData();
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   return (
     <>
@@ -122,7 +94,7 @@ function CBIR() {
         handleChangeMultiple={handleChangeMultiple}
       />
 
-      <Results data={resultData} />
+      <Results />
     </>
   );
 }

@@ -1,3 +1,5 @@
+import CameraBG from "@/components/background/camera";
+
 export default function Layout({
   children, // will be a page or nested layout
 }: {
@@ -6,7 +8,7 @@ export default function Layout({
   return (
     <main className='flex min-h-screen flex-col items-center justify-between p-24 relative gap-10'>
       <div className='absolute -z-10 top-0 left-0 w-full h-full object-cover'>
-        <svg
+        {/* <svg
           width='1440'
           height='1916'
           viewBox='0 0 1440 1916'
@@ -56,7 +58,9 @@ export default function Layout({
               <stop offset='1' stopColor='#A6EF93' />
             </linearGradient>
           </defs>
-        </svg>
+        </svg> */}
+
+        <CameraBG />
       </div>
 
       {children}
