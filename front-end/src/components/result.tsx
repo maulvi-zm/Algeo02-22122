@@ -1,8 +1,11 @@
-import React, { useEffect } from "react";
-import Image from "next/image";
+import React from "react";
 import RainbowTitle from "./ui/rainbow-title";
 import Glass from "./ui/glassmorphism";
-import Pagination from "./pagination";
+import RenderResult from "./render-result";
+import { Button } from "./ui/button";
+import Loading from "./ui/loading";
+import { Switch } from "./ui/switch";
+import { useToast } from "./ui/use-toast";
 
 export interface ImageData {
   url: string;
@@ -14,30 +17,54 @@ export interface JsonData {
   time: number;
 }
 
-function Results({ data }: { data: JsonData }) {
-  const [currentPage, setCurrentPage] = React.useState<number>(1);
+const initialData: JsonData = {
+  data: [],
+  time: 0,
+};
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setCurrentPage(Number(e.currentTarget.textContent));
+const texture: string = "http://localhost:8000/get-result-texture";
+const color: string = "http://localhost:8000/get-result-color";
+
+function Results() {
+  const [resultData, setResultData] = React.useState<JsonData>(initialData);
+  const type = React.useRef<string>(color);
+  const [Load, setLoad] = React.useState<boolean>(false);
+  const length = resultData.data.length;
+  const { toast } = useToast();
+
+  const fetchData = async () => {
+    try {
+      setLoad(true);
+      const response = await fetch(type.current); // Ganti URL dengan URL yang sesuai
+      if (!response.ok) {
+        toast({
+          title: "Something Went Wrong!",
+          description: "Please try again later",
+          variant: "destructive",
+        });
+        throw new Error("Network response was not ok");
+      }
+      const jsonData = await response.json();
+
+      setResultData(jsonData);
+    } catch (error) {
+      toast({
+        title: "Something Went Wrong!",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+    } finally {
+      setLoad(false);
+    }
   };
 
-  const handlePrevClick = () => {
-    setCurrentPage((prev) => prev - 1);
+  const handleClick = () => {
+    if (type.current === color) {
+      type.current = texture;
+    } else {
+      type.current = color;
+    }
   };
-
-  const handleNextClick = () => {
-    setCurrentPage((prev) => prev + 1);
-  };
-
-  const start = (currentPage - 1) * 3;
-  const end = start + 3;
-  const length = data.data.length;
-
-  let slicedData = length > 3 ? data.data.slice(start, end) : data.data;
-
-  useEffect(() => {
-    slicedData = data.data.slice(start, end);
-  }, []);
 
   return (
     <>
@@ -45,45 +72,25 @@ function Results({ data }: { data: JsonData }) {
         <div className='w-full flex justify-between'>
           <RainbowTitle title='Result' />
           {length > 0 && (
-            <RainbowTitle title={`${length} result in ${data.time}`} />
+            <RainbowTitle
+              title={`${length} result in ${resultData.time.toFixed(
+                2
+              )} seconds`}
+            />
           )}
         </div>
 
         <Glass className='space-y-8'>
-          <div className='h-[300px]'>
-            {length > 0 ? (
-              <div className='grid grid-cols-3 min-h-[300px] h-auto gap-6'>
-                {slicedData.map((file, idx) => (
-                  <div className='flex flex-col w-full h-full' key={idx}>
-                    <div className='aspect-square relative'>
-                      <Image
-                        src={file.url}
-                        alt=''
-                        className='object-contain rounded-xl w-fit h-fit'
-                        fill
-                      />
-                      <div className='absolute bottom-0 w-full p-2 rounded-xl bg-white text-center font-semibold'>
-                        {file.percentage.toFixed(2)}
-                        {"%"}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className='w-full h-full flex items-center justify-center text-center font-semibold text-[24px]'>
-                No selected data-set
-              </div>
-            )}
+          <div className='flex items-center gap-4'>
+            <div className='p-[12px] bg-white rounded-lg flex items-center gap-2'>
+              <p>Color</p>
+              <Switch onClick={handleClick} />
+              <p>Texture</p>
+            </div>
+            <Button onClick={fetchData}>Search</Button>
           </div>
 
-          <Pagination
-            handleClick={handleClick}
-            handleNextClick={handleNextClick}
-            handlePrevClick={handlePrevClick}
-            length={length}
-            currentPage={currentPage}
-          />
+          {Load ? <Loading /> : <RenderResult data={resultData} />}
         </Glass>
       </div>
     </>

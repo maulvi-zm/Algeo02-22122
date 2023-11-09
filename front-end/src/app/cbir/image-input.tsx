@@ -49,11 +49,6 @@ function ImageInput({
             Submit
           </Button>
         </form>
-        <div className='flex justify-center'>
-          <p>Color</p>
-          <Switch />
-          <p>Texture</p>
-        </div>
       </div>
     </>
   );
