@@ -1,4 +1,4 @@
-import hashlib
+import xxhash
 import ujson
 
 def np_to_list(np_array):
@@ -7,7 +7,7 @@ def np_to_list(np_array):
 def hash_file(file_path):
     with open(file_path, 'rb') as file:
         file_data = file.read()
-        return hashlib.md5(file_data).hexdigest()
+        return xxhash.xxh32(file_data).hexdigest()
 
 def input_to_json(data, new_entry):
     key, value = new_entry

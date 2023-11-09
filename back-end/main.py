@@ -4,10 +4,14 @@ from pathlib import Path
 from fastapi.staticfiles import StaticFiles
 import requests
 from bs4 import BeautifulSoup
+import caches
 import os
 from ExportPDF import export_pdf
 from urllib.parse import urljoin
-from CBIR_REVISED import Cbir_Color
+from CBIR_Multiprocess import Cbir_Color2
+from CBIR_NonMultiprocess import Cbir_Color1
+import caches2
+from multiprocessing import Lock
 
 UPLOAD_DIR_SEARCH = Path() / "uploads/search"
 UPLOAD_DIR_DATA= Path() / "uploads/data-set"
@@ -15,7 +19,6 @@ UPLOAD_DIR_DATA= Path() / "uploads/data-set"
 app = FastAPI()
 
 data_set_directory = Path(__file__).parent / "uploads/data-set"
-
 app.mount("/uploads/data-set", StaticFiles(directory=data_set_directory), name="data-set")
 
 app.add_middleware(
@@ -26,9 +29,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+cache2 = caches2.json_to_dict()
+cache_lock = Lock()
+cache1 = caches.csv_to_array()
+
+
 @app.post("/uploadfile/")
 async def create_upload_file(file_upload: UploadFile):
-    
+    delete_search()
     contents = await file_upload.read()
     save_path = UPLOAD_DIR_SEARCH / "received_image.jpg"
     with open(save_path, "wb") as f:
@@ -50,6 +58,7 @@ async def create_upload_file(file_uploads: list[UploadFile]):
 
 @app.post("/capture_frame")
 async def receive_image(file: UploadFile = File(...)):
+    delete_search()
     content = await file.read()
     save_path = UPLOAD_DIR_SEARCH / "received_image.jpg"
     with open(save_path, "wb") as f:
@@ -61,8 +70,7 @@ async def receive_image(file: UploadFile = File(...)):
 @app.get("/scrape")
 async def scrape_images(link: str):
     delete_dataset()
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36",
-    "Accept-Language": "en-US,en;q=0.5",}
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36","Accept-Language": "en-US,en;q=0.5",}
     response = requests.get(url=link, headers=headers)
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -90,11 +98,17 @@ async def scrape_images(link: str):
 
 @app.get("/get-result")
 async def send_result():
-    similarity_arr, time = Cbir_Color()
+    
+    if len(os.listdir(UPLOAD_DIR_DATA)) > 500:
+        similarity_arr, time = Cbir_Color2(cache=cache2,cache_lock=cache_lock)
+    else :
+        similarity_arr, time = Cbir_Color1(cache=cache1)
+    
+    
     image_objects = []
     for item in similarity_arr:
         image_objects.append({
-            "url": f"http://localhost:8000/uploads/data-set{item['url']}",
+            "url": f"http://localhost:8000/uploads/data-set/{item['url']}",
             "percentage": item["percentage"]
         })
     
@@ -105,7 +119,13 @@ async def send_result():
 
 @app.get("/download_pdf")
 async def download_pdf(response: Response):
-    export_pdf()
+    
+    if len(os.listdir(UPLOAD_DIR_SEARCH)) > 500:
+        similarity_arr, time = Cbir_Color2(cache=cache2,cache_lock=cache_lock)
+    else :
+        similarity_arr, time = Cbir_Color1(cache=cache1)
+        
+    export_pdf(similarity_arr=similarity_arr, time=time)
     
     response.headers["Content-Disposition"] = "attachment; filename=template-output.pdf"
     response.headers["Content-Type"] = "application/pdf"
@@ -120,3 +140,9 @@ def delete_dataset():
         os.remove(UPLOAD_DIR_DATA / file)
         
     return {"message": "Data-set deleted"}
+
+def delete_search():
+    for file in os.listdir(UPLOAD_DIR_SEARCH):
+        os.remove(UPLOAD_DIR_SEARCH / file)
+        
+    return {"message": "Search deleted"}

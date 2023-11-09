@@ -2,6 +2,7 @@ import hashlib
 import csv
 import os
 
+
 csv.field_size_limit(100000000)  # Set a larger limit for the CSV field size
 
 def np_to_list(np_array):
@@ -15,10 +16,6 @@ def hash_file(file_path):
     with open(file_path, 'rb') as file:
         file_data = file.read()
         return hashlib.md5(file_data).hexdigest()
-
-def hash_function(md5):
-    file_hash = md5[:2] + md5[8:10] + md5[16:18] + md5[24:26]
-    return file_hash
 
 def search_index(data, key):
     
@@ -47,13 +44,16 @@ def input_to_csv(data, new_entry):
     data.insert(insert_index, new_entry)
 
 def csv_to_array():
+    if not os.path.exists('./caches/data.csv'):
+        return []
+    
     with open('./caches/data.csv', 'r') as file:
         reader = csv.reader(file, delimiter=',')
         data = list(reader)
         for x in data:
-            x[2] = x[2].strip('[').strip(']').split(', ')
-            for i in range(len(x[2])):
-                x[2][i] = float(x[2][i])
+            x[1] = x[1].strip('[').strip(']').split(', ')
+            for i in range(len(x[1])):
+                x[1][i] = float(x[1][i])
                 
         return data
 
@@ -64,14 +64,13 @@ def array_to_csv(data):
 
 def cek_cache(data,path):
     md5 = hash_file(path)
-    file_hash = hash_function(md5)
-    found, index = search_index(data, file_hash)
+    found, index = search_index(data, md5)
     
     # Collision handler
     if found:
         found = False
-        while not found and data[index][0] == file_hash and index < len(data):
-            if data[index][1] == md5:
+        while not found and data[index][0] == md5 and index < len(data):
+            if data[index][0] == md5:
                 found = True
             else:
                 index += 1

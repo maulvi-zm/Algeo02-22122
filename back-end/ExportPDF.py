@@ -1,18 +1,15 @@
 from jinja2 import Template
 import pdfkit
-import json
-from CBIR_REVISED import Cbir_Color
 
 TEMPLATE_FILE = "PDF.html"
 
-def export_pdf():
-    similarity_arr, time = Cbir_Color()
+def export_pdf(similarity_arr, time):
 
     # Gathering image data
     image_objects = []
     for item in similarity_arr:
         image_objects.append({
-            "url": f"D:/IF2121_TB_02/back-end/uploads{item['url']}",
+            "url": f"D:/IF2121_TB_02/back-end/uploads/data-set/{item['url']}",
             "percentage": item["percentage"]
         })
 
