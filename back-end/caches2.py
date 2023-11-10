@@ -13,14 +13,17 @@ def input_to_json(data, new_entry):
     key, value = new_entry
     data[f"{key}"] = value
 
-def json_to_dict():
+def json_to_dict(json_file):
     try:
-        with open("./caches/data.json", 'r') as file:
+        with open(json_file, 'r') as file:
             data = ujson.load(file)
     except FileNotFoundError:
         data = {}
     return data
 
-def dict_to_json(data, json_file):
-    with open(json_file, 'w') as file:
+def dict_to_json(data, file_path):
+    for key in data:
+        data[key] = [float(x) for x in data[key]]
+
+    with open(file_path, 'w') as file:
         ujson.dump(data, file)

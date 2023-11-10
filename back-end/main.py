@@ -30,9 +30,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-cache2 = caches2.json_to_dict()
+cache2 = caches2.json_to_dict("./caches/data.json")
 cache_lock = Lock()
 cache1 = caches.csv_to_array()
+cachetexture = caches2.json_to_dict("./caches/texture.json")
 
 
 @app.post("/uploadfile/")
@@ -124,7 +125,7 @@ async def send_result_color():
 @app.get("/get-result-texture")
 async def send_resul_texture():
     
-    similarity_arr, time = Texture()
+    similarity_arr, time = Texture(cachetexture)
 
     make_pdf(similarity_arr=similarity_arr, time=time)
     

@@ -83,7 +83,7 @@ def histogram_array_parallel(image_paths, cache, cache_lock):
     histograms = np.zeros((len(image_paths), 1134), dtype=np.float64)
     cache_updates = {}
     for index, (hash_val, histogram) in enumerate(results):
-        cache_updates[hash_val] = histogram
+        cache_updates[f"{caches2.hash_file(hash_val)}"] = histogram
 
     cache_lock.acquire()
     cache.update(cache_updates)
@@ -154,10 +154,10 @@ def Cbir_Color2(cache, cache_lock):
 OUTPUT_FOLDER = "./output"
 INPUT_FOLDER = "./uploads/search"
 DATASET_FOLDER = "./uploads/data-set"
-cache = caches2.json_to_dict()
+cache = caches2.json_to_dict("./caches/data.json")
 cache_lock = Lock()
 
 if __name__ == "__main__":
-    cProfile.run("Cbir_Color(cache, cache_lock)", "my_func_stats")
+    cProfile.run("Cbir_Color2(cache, cache_lock)", "my_func_stats")
     p = pstats.Stats("my_func_stats")
     p.sort_stats(1).print_stats()
