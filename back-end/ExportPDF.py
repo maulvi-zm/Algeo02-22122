@@ -9,7 +9,7 @@ def export_pdf(similarity_arr, time):
     image_objects = []
     for item in similarity_arr:
         image_objects.append({
-            "url": f"D:/IF2121_TB_02/back-end/uploads/data-set/{item['url']}",
+            "url": f"./uploads/data-set/{item['url']}",
             "percentage": item["percentage"]
         })
 

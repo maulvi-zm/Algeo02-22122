@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, Response
+from fastapi import FastAPI, UploadFile, File, Response, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from fastapi.staticfiles import StaticFiles
@@ -51,7 +51,7 @@ async def create_upload_file(file_uploads: list[UploadFile]):
     delete_dataset()
     for file_upload in file_uploads:
         contents = await file_upload.read()
-        save_path = UPLOAD_DIR_DATA / file_upload.filename
+        save_path = UPLOAD_DIR_DATA / file_upload.filename.split("/")[-1]
         with open(save_path, "wb") as f:
             f.write(contents)
         
@@ -69,8 +69,8 @@ async def receive_image(file: UploadFile = File(...)):
     return {"message": "Image received and processed"}
 
 
-@app.get("/scrape")
-async def scrape_images(link: str):
+@app.post("/scrape")
+async def scrape_images(link: str = Form(...)):
     delete_dataset()
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36","Accept-Language": "en-US,en;q=0.5",}
     response = requests.get(url=link, headers=headers)
@@ -93,7 +93,7 @@ async def scrape_images(link: str):
                 if img_response.status_code == 200:
                     with open(os.path.join(UPLOAD_DIR_DATA, f"{index}.jpg"), 'wb') as f:
                         f.write(img_response.content)
-                        arr_responses.append({"url": f"localhost:8000/uploads/data-set/{index}.jpg"})
+                        arr_responses.append({"url": f"http://localhost:8000/uploads/data-set/{index}.jpg"})
                 responses["data"] = arr_responses
     else:
         return {"message": "failed to scrape images"}
