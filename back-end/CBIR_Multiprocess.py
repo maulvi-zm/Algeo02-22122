@@ -19,7 +19,7 @@ def process_single_image(image_path, cache):
     
     img = np.array(Image.open(image_path))
     hist = np.zeros(14 * 9)
-    hists = histogram_array(img, hist)
+    hists = histogram_array(img)
     
     return image_path, caches2.np_to_list(np.array(hists))
 
@@ -31,14 +31,13 @@ def color_quantization(h, s, v, hist, iteration):
 
     for i, (start, end) in enumerate(h_ranges):
         hist[iteration * 14 + i] += np.sum(np.logical_and(h >= start, h <= end))
-
+                
     for i, (start, end) in enumerate(s_ranges):
         hist[iteration * 14 + i + 8] += np.sum(np.logical_and(s >= start, s <= end))
 
     for i, (start, end) in enumerate(v_ranges):
         hist[iteration * 14 + i + 11] += np.sum(np.logical_and(v >= start, v <= end))
-
-
+        
     return hist
 
 @jit(nopython=True)
@@ -71,8 +70,7 @@ def calculate_similarity(hist1, hist2):
 def process_image(args):
     image_path = args
     img = cv2.imread(image_path)
-    hist = np.zeros(14 * 9)
-    hists = histogram_array(img, hist)
+    hists = histogram_array(img)
     return caches2.hash_file(image_path), caches2.np_to_list(np.array(hists))
 
 def histogram_array_parallel(image_paths, cache, cache_lock):
@@ -80,7 +78,7 @@ def histogram_array_parallel(image_paths, cache, cache_lock):
         partial_process_single_image = partial(process_single_image, cache=cache)
         results = list(executor.map(partial_process_single_image, image_paths))
 
-    histograms = np.zeros((len(image_paths), 1134), dtype=np.float64)
+    histograms = np.zeros((len(image_paths), 14*9), dtype=np.float64)
     cache_updates = {}
     for index, (hash_val, histogram) in enumerate(results):
         cache_updates[f"{caches2.hash_file(hash_val)}"] = histogram
@@ -94,28 +92,27 @@ def histogram_array_parallel(image_paths, cache, cache_lock):
 
     return histograms.tolist(), cache
 
-def process_grid_cell(args):
-    img, i, j, hists = args
-    height, width, _ = img.shape
-    grid_height = height // 3
-    grid_width = width // 3
+    
 
-    start_h = i * grid_height
-    end_h = (i + 1) * grid_height
-    start_w = j * grid_width
-    end_w = (j + 1) * grid_width
+def histogram_array(img):
+    hists = np.zeros(14 * 9)
+    for i in range(3):
+        for j in range(3):
+            height, width, _ = img.shape
+            grid_height = height // 3
+            grid_width = width // 3
 
-    grid = img[start_h:end_h, start_w:end_w]
-    r, g, b = grid[:, :, 0], grid[:, :, 1], grid[:, :, 2]
-    h, s, v = RGB2HSV(r, g, b)
-    return color_quantization(h, s, v, hists, iteration = i * 3 + j)
+            start_h = i * grid_height
+            end_h = (i + 1) * grid_height
+            start_w = j * grid_width
+            end_w = (j + 1) * grid_width
 
-def histogram_array(img, hists):
-    with ThreadPoolExecutor(max_workers=6) as executor:
-        args = [(img, i, j, hists) for i in range(3) for j in range(3)]
-        hists = list(executor.map(process_grid_cell, args))
-
+            grid = img[start_h:end_h, start_w:end_w]
+            r, g, b = grid[:, :, 0], grid[:, :, 1], grid[:, :, 2]
+            h, s, v = RGB2HSV(r, g, b)
+            hists = color_quantization(h, s, v, hists, iteration = i * 3 + j)
     return hists
+
 
 def Cbir_Color2(cache, cache_lock):
     program_time = time.perf_counter()

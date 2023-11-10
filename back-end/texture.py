@@ -114,14 +114,14 @@ def Procedure(image_path1, image_path2, cache):
 
     cosineTotal = 0
     
-    temp = cache.get(image_path1)
+    temp = cache.get(f"{caches2.hash_file(image_path1)}")
     if temp is None:
         vector1 = Vector(image_path1, 0)
         cache[f"{caches2.hash_file(image_path2)}"] = vector1
     else:
         vector1 = temp
     
-    temp = cache.get(image_path2)
+    temp = cache.get(f"{caches2.hash_file(image_path2)}")
     if temp is None:
         vector2 = Vector(image_path2, 0)
         cache[f"{caches2.hash_file(image_path2)}"] = vector2

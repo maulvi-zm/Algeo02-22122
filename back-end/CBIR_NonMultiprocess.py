@@ -26,43 +26,30 @@ def color_quantization(h, s, v, hist, iteration):
 
     for i, (start, end) in enumerate(v_ranges):
         hist[iteration * 14 + i + 11] += np.sum(np.logical_and(v >= start, v <= end))
+        
+    return hist
 
-
+@jit(nopython=True)
 def RGB2HSV(r, g, b):
-    r, g, b = r / 255.0, g / 255.0, b / 255.0
+    r, g, b = r.flatten() / 255.0, g.flatten() / 255.0, b.flatten() / 255.0
 
     cmax = np.maximum(r, np.maximum(g, b))
     cmin = np.minimum(r, np.minimum(g, b))
     delta = cmax - cmin
 
-    h = np.zeros(r.shape)
-    s = np.zeros(r.shape)
-    v = np.zeros(r.shape)
-
-    # Hue calculation
-    nonzero_indices = delta != 0
-    h_temp = np.zeros_like(r)
-    division = np.zeros_like(r)
-    
-    h_temp[cmax == cmin] = 0
-
-    division = (g - b) / np.where(nonzero_indices, delta, 1) 
-    h_temp[cmax == r] = 60 * (division[cmax == r] % 6)
-
-    division = (b - r) / np.where(nonzero_indices, delta, 1)  
-    h_temp[cmax == g] = 60 * (division[cmax == g] + 2)
-
-    division = (r - g) / np.where(nonzero_indices, delta, 1) 
-    h_temp[cmax == b] = 60 * (division[cmax == b] + 4)
-
-    h = h_temp
-
-    # Saturation calculation
-    s = np.where(cmax != 0, delta / cmax, 0)
-    s[~np.isfinite(s)] = 0
-
-    # Value calculation
+    h = np.zeros_like(r)
+    s = np.zeros_like(r)
     v = cmax
+
+    r_indices = np.where(cmax == r)
+    g_indices = np.where(cmax == g)
+    b_indices = np.where(cmax == b)
+
+    h[r_indices] = 60 * ((g[r_indices] - b[r_indices]) / delta[r_indices] % 6)
+    h[g_indices] = 60 * ((b[g_indices] - r[g_indices]) / delta[g_indices] + 2)
+    h[b_indices] = 60 * ((r[b_indices] - g[b_indices]) / delta[b_indices] + 4)
+
+    s[cmax != 0] = delta[cmax != 0] / cmax[cmax != 0]
 
     return h, s, v
 
@@ -71,9 +58,7 @@ def calculate_similarity(hist1, hist2):
 
 
 def histogram_array(img,hists):
-    
     height, width, _ = img.shape
-
     grid_height = height // 3
     grid_width = width // 3
 
@@ -90,7 +75,7 @@ def histogram_array(img,hists):
 
             h, s, v = RGB2HSV(r, g, b)
 
-            color_quantization(h, s, v, hists, iteration = i * 3 + j)
+            hists = color_quantization(h, s, v, hists, iteration = i * 3 + j)
 
     return hists  
 

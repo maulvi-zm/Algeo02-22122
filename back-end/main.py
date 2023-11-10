@@ -95,7 +95,7 @@ async def scrape_images(link: str):
                 if img_response.status_code == 200:
                     with open(os.path.join(UPLOAD_DIR_DATA, f"{index}.jpg"), 'wb') as f:
                         f.write(img_response.content)
-                        arr_responses.append({"url": f"localhost:8000/uploads/data-set/{index}.jpg"})
+                        arr_responses.append({"url": f"127.0.0.1:8000/uploads/data-set/{index}.jpg"})
                 responses["data"] = arr_responses
     else:
         return {"message": "failed to scrape images"}
@@ -116,7 +116,7 @@ async def send_result_color(background_tasks: BackgroundTasks):
     image_objects = []
     for item in similarity_arr:
         image_objects.append({
-            "url": f"http://localhost:8000/uploads/data-set/{item['url']}",
+            "url": f"http://127.0.0.1:8000/uploads/data-set/{item['url']}",
             "percentage": item["percentage"]
         })
     
@@ -134,7 +134,7 @@ async def send_resul_texture(background_tasks: BackgroundTasks):
     image_objects = []
     for item in similarity_arr:
         image_objects.append({
-            "url": f"http://localhost:8000/uploads/data-set/{item['url']}",
+            "url": f"http://127.0.0.1:8000/uploads/data-set/{item['url']}",
             "percentage": item["percentage"]
         })
     
