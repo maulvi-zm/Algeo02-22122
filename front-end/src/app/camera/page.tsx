@@ -6,6 +6,7 @@ import DatasetInput from "@/components/dataset-input";
 import React from "react";
 import Results from "@/components/result";
 import { useToast } from "@/components/ui/use-toast";
+import CameraResult from "@/components/camera-result";
 
 function Camera() {
   const [selectedData, setSelectedData] = React.useState<File[]>([]);
@@ -68,7 +69,7 @@ function Camera() {
         handleChangeMultiple={handleChangeMultiple}
       />
 
-      <Results />
+      <CameraResult />
     </>
   );
 }
