@@ -12,6 +12,7 @@ from CBIR_Multiprocess import Cbir_Color2
 from CBIR_NonMultiprocess import Cbir_Color1
 import caches2
 from multiprocessing import Lock
+from texture import Texture
 
 UPLOAD_DIR_SEARCH = Path() / "uploads/search"
 UPLOAD_DIR_DATA= Path() / "uploads/data-set"
@@ -96,7 +97,7 @@ async def scrape_images(link: str):
     return {"message": "Images scraped and saved to uploads/data-set"}
 
 
-@app.get("/get-result")
+@app.get("/get-result-color")
 async def send_result():
     
     if len(os.listdir(UPLOAD_DIR_DATA)) > 500:
@@ -105,6 +106,22 @@ async def send_result():
         similarity_arr, time = Cbir_Color1(cache=cache1)
     
     
+    image_objects = []
+    for item in similarity_arr:
+        image_objects.append({
+            "url": f"http://localhost:8000/uploads/data-set/{item['url']}",
+            "percentage": item["percentage"]
+        })
+    
+    return {
+        "data": image_objects,
+        "time": time,
+    }
+@app.get("/get-result-texture")
+async def send_result():
+    
+    similarity_arr, time = Texture()
+
     image_objects = []
     for item in similarity_arr:
         image_objects.append({

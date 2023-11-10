@@ -1,3 +1,5 @@
+import glob
+import os
 from PIL import Image
 import numpy as np
 import math, time
@@ -121,7 +123,6 @@ def Cosine(vector1, vector2):
     return cosine_similarity * 100
 
 def Procedure(image_path1, image_path2):
-    start_time = time.time()
 
     angle = [0]
     cosineTotal = 0
@@ -131,6 +132,26 @@ def Procedure(image_path1, image_path2):
         vector2 = Vector(image_path2, i)
         cosineTotal += Cosine(vector1, vector2)
 
-    duration = time.time() - start_time
+    return cosineTotal
 
-    return [cosineTotal, duration]
+def Texture():
+    start = time.time()
+    similarity_arr = []
+
+    for folder in [DATASET_FOLDER]:
+        image_files = glob.glob(os.path.join(folder, '*.jpg'))
+        for image_path in sorted(image_files):
+            if os.path.isfile(image_path):
+                similarity = Procedure(INPUT_FILE, image_path)
+                if similarity > 60:
+                        similarity_arr.append({
+                            "url": os.path.basename(image_path),
+                            "percentage": similarity
+                        })
+    similarity_arr = sorted(similarity_arr, key=lambda k: -k['percentage'])
+    end = time.time()
+    return similarity_arr, end-start
+    
+
+INPUT_FILE = "./uploads/search/received_image.jpg"
+DATASET_FOLDER = "./uploads/data-set"
