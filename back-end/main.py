@@ -77,7 +77,8 @@ async def scrape_images(link: str):
         soup = BeautifulSoup(response.text, 'html.parser')
         image_tags = soup.find_all('img')
         os.makedirs(UPLOAD_DIR_DATA, exist_ok=True)
-        
+        arr_responses = []
+        responses = {}
         for index, img in enumerate(soup.find_all('img')):
             img_link = img.get('src')
             if img_link:
@@ -87,11 +88,12 @@ async def scrape_images(link: str):
                     complete_url = img_link
                 
                 img_response = requests.get(complete_url)
-                responses = []
+                
                 if img_response.status_code == 200:
                     with open(os.path.join(UPLOAD_DIR_DATA, f"{index}.jpg"), 'wb') as f:
                         f.write(img_response.content)
-                        responses.append({"url": f"localhost:8000/uploads/data-set/{index}.jpg"})
+                        arr_responses.append({"url": f"localhost:8000/uploads/data-set/{index}.jpg"})
+                responses["data"] = arr_responses
     else:
         return {"message": "failed to scrape images"}
 
@@ -141,15 +143,16 @@ async def send_resul_texture():
 @app.get("/download_pdf")
 async def download_pdf(response: Response):
     
-    response.headers["Content-Disposition"] = "attachment; filename=template-output.pdf"
+    response.headers["Content-Disposition"] = "attachment; filename=pdfOutput.pdf"
     response.headers["Content-Type"] = "application/pdf"
 
-    with open("template-output.pdf", "rb") as file:
-        try:
-            pdf = file.read()
-            return Response(content=pdf, media_type="application/pdf")
-        except:
-            return {"message": "failed to download pdf"}
+    if os.path.exists("template-output.pdf"):
+        with open("template-output.pdf", "rb") as pdf:
+            response.body = pdf.read()
+            return response
+    else:
+        return {"message": "PDF not found"}
+        
     
 def delete_dataset():
     for file in os.listdir(UPLOAD_DIR_DATA):
