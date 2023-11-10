@@ -1,7 +1,9 @@
 from jinja2 import Template
 import pdfkit
+from pathlib import Path
 
 TEMPLATE_FILE = "PDF.html"
+UPLOAD_DIR_DATA= Path(__file__).parent / "uploads/data-set"
 
 def export_pdf(similarity_arr, time):
 
@@ -9,7 +11,7 @@ def export_pdf(similarity_arr, time):
     image_objects = []
     for item in similarity_arr:
         image_objects.append({
-            "url": f"./uploads/data-set/{item['url']}",
+            "url": f"{UPLOAD_DIR_DATA}/{item['url']}",
             "percentage": item["percentage"]
         })
 
@@ -18,6 +20,8 @@ def export_pdf(similarity_arr, time):
         "url": "Total Execution Time:",
         "percentage": f"{time} seconds"
     })
+
+    print(image_objects)
 
     template_html = """
     <!DOCTYPE html>
