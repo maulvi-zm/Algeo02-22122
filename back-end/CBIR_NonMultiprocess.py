@@ -146,11 +146,12 @@ def Cbir_Color1(cache):
                             "url": os.path.basename(image_path),
                             "percentage": round(similarity)
                         })
-    
+                        
     similarity_arr = sorted(similarity_arr, key=lambda k: float(k["percentage"]) if isinstance(k["percentage"], (int, float, complex)) else 0, reverse=True)
     caches.array_to_csv(cache)
     execution_time = time.time() - program_time
     return similarity_arr, execution_time
+
 
 if __name__ == "__main__":
     cache = caches.csv_to_array()

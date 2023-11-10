@@ -16,9 +16,11 @@ from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 def process_single_image(image_path, cache):
     if cache.get(caches2.hash_file(image_path)) is not None:
         return image_path, cache.get(caches2.hash_file(image_path))
+    
     img = np.array(Image.open(image_path))
     hist = np.zeros(14 * 9)
     hists = histogram_array(img, hist)
+    
     return image_path, caches2.np_to_list(np.array(hists))
 
 @jit(nopython=True)
@@ -74,14 +76,14 @@ def process_image(args):
     return caches2.hash_file(image_path), caches2.np_to_list(np.array(hists))
 
 def histogram_array_parallel(image_paths, cache, cache_lock):
-    with ProcessPoolExecutor(max_workers=5) as executor:
+    with ProcessPoolExecutor(max_workers=6) as executor:
         partial_process_single_image = partial(process_single_image, cache=cache)
         results = list(executor.map(partial_process_single_image, image_paths))
 
     histograms = np.zeros((len(image_paths), 1134), dtype=np.float64)
     cache_updates = {}
     for index, (hash_val, histogram) in enumerate(results):
-        cache_updates[hash_val] = {f"{hash_val}: {histogram}"}
+        cache_updates[hash_val] = histogram
 
     cache_lock.acquire()
     cache.update(cache_updates)
@@ -135,7 +137,7 @@ def Cbir_Color2(cache, cache_lock):
                 "url": os.path.basename(image_files[idx + 1]),
                 "percentage": similarity
             })
-        cache_updates[caches2.hash_file(image_files[idx + 1])] = histogram
+        cache_updates[f'{caches2.hash_file(image_files[idx + 1])}'] = histogram
 
     # Batch cache updates
     cache_lock.acquire()
@@ -143,6 +145,7 @@ def Cbir_Color2(cache, cache_lock):
         cache[hash_val] = histogram
     cache_lock.release()
 
+    caches2.dict_to_json(cache, './caches/data.json')
     similarity_arr = sorted(similarity_arr, key=lambda k: -k['percentage'])
     execution_time = time.perf_counter() - program_time
     return similarity_arr, execution_time
