@@ -3,6 +3,7 @@ import os
 from PIL import Image
 import numpy as np
 import math, time
+import cProfile, pstats
 
 def DisplayMatrix(matrix):
     for i in range(len(matrix)):
@@ -41,26 +42,19 @@ def GLCM(grayscale_matrix, angle=0):
     # Initialize the GLCM matrix
     glcm = np.zeros((height, width), dtype=np.uint32)
 
-    # Define the displacement based on the angle (0, 45, 90, 135 degrees)
-    if angle == 0:
-        displacement = (0, 1)
-    elif angle == 45:
-        displacement = (-1, 1)
-    elif angle == 90:
-        displacement = (-1, 0)
-    elif angle == 135:
-        displacement = (-1, -1)
-    else:
-        raise ValueError("Input derajat salah")
+    
+    displacement = (0, 1)
 
-    for i in range(height):
-        for j in range(width - 1):
-            # Get the current pixel value and the value at the displaced position
-            current_pixel = grayscale_array[i, j]
-            neighbor_pixel = grayscale_array[i + displacement[0], j + displacement[1]]
+    # Calculate the indices of the current pixels and the neighbor pixels
+    current_indices = (np.arange(height), np.arange(width))
+    neighbor_indices = (np.arange(height) + displacement[0], np.arange(width) + displacement[1])
 
-            # Increment the corresponding GLCM element
-            glcm[current_pixel, neighbor_pixel] += 1
+    # Get the current pixels and the neighbor pixels
+    current_pixels = grayscale_array[current_indices]
+    neighbor_pixels = grayscale_array[neighbor_indices]
+
+    # Increment the corresponding GLCM elements
+    np.add.at(glcm, (current_pixels, neighbor_pixels), 1)
 
     return glcm
 
@@ -155,3 +149,8 @@ def Texture():
 
 INPUT_FILE = "./uploads/search/received_image.jpg"
 DATASET_FOLDER = "./uploads/data-set"
+
+if __name__ == "__main__":
+    cProfile.run("Texture()", "my_func_stats")
+    p = pstats.Stats("my_func_stats")
+    p.sort_stats(1).print_stats()

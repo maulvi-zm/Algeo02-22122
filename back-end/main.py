@@ -87,24 +87,26 @@ async def scrape_images(link: str):
                     complete_url = img_link
                 
                 img_response = requests.get(complete_url)
-                
+                responses = []
                 if img_response.status_code == 200:
                     with open(os.path.join(UPLOAD_DIR_DATA, f"{index}.jpg"), 'wb') as f:
                         f.write(img_response.content)
+                        responses.append({"url": f"localhost:8000/uploads/data-set/{index}.jpg"})
     else:
         return {"message": "failed to scrape images"}
 
-    return {"message": "Images scraped and saved to uploads/data-set"}
+    return responses
 
 
 @app.get("/get-result-color")
-async def send_result():
+async def send_result_color():
     
     if len(os.listdir(UPLOAD_DIR_DATA)) > 500:
         similarity_arr, time = Cbir_Color2(cache=cache2,cache_lock=cache_lock)
     else :
         similarity_arr, time = Cbir_Color1(cache=cache1)
     
+    make_pdf(similarity_arr=similarity_arr, time=time)
     
     image_objects = []
     for item in similarity_arr:
@@ -118,10 +120,12 @@ async def send_result():
         "time": time,
     }
 @app.get("/get-result-texture")
-async def send_result():
+async def send_resul_texture():
     
     similarity_arr, time = Texture()
 
+    make_pdf(similarity_arr=similarity_arr, time=time)
+    
     image_objects = []
     for item in similarity_arr:
         image_objects.append({
@@ -137,21 +141,16 @@ async def send_result():
 @app.get("/download_pdf")
 async def download_pdf(response: Response):
     
-    if len(os.listdir(UPLOAD_DIR_SEARCH)) > 500:
-        similarity_arr, time = Cbir_Color2(cache=cache2,cache_lock=cache_lock)
-    else :
-        similarity_arr, time = Cbir_Color1(cache=cache1)
-        
-    export_pdf(similarity_arr=similarity_arr, time=time)
-    
     response.headers["Content-Disposition"] = "attachment; filename=template-output.pdf"
     response.headers["Content-Type"] = "application/pdf"
 
     with open("template-output.pdf", "rb") as file:
-        pdf = file.read()
-        return Response(content=pdf, media_type="application/pdf")
+        try:
+            pdf = file.read()
+            return Response(content=pdf, media_type="application/pdf")
+        except:
+            return {"message": "failed to download pdf"}
     
-
 def delete_dataset():
     for file in os.listdir(UPLOAD_DIR_DATA):
         os.remove(UPLOAD_DIR_DATA / file)
@@ -163,3 +162,7 @@ def delete_search():
         os.remove(UPLOAD_DIR_SEARCH / file)
         
     return {"message": "Search deleted"}
+
+async def make_pdf(similarity_arr, time):
+    export_pdf(similarity_arr=similarity_arr, time=time)
+    return {"message": "PDF made"}

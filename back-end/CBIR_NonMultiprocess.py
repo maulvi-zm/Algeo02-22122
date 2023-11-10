@@ -8,10 +8,11 @@ import pstats
 import cProfile
 from multiprocessing import Pool
 import warnings
+from numba import jit
 
 
 
-
+@jit(nopython=True)
 def color_quantization(h, s, v, hist, iteration):
     h_ranges = np.array([(316, 360), (0, 25), (26, 40), (41, 120), (121, 190), (191, 270), (271, 295), (296, 315)])
     s_ranges = np.array([(0, 0.2), (0.21, 0.7), (0.71, 1)])
@@ -25,6 +26,7 @@ def color_quantization(h, s, v, hist, iteration):
 
     for i, (start, end) in enumerate(v_ranges):
         hist[iteration * 14 + i + 11] += np.sum(np.logical_and(v >= start, v <= end))
+
 
 def RGB2HSV(r, g, b):
     r, g, b = r / 255.0, g / 255.0, b / 255.0
@@ -65,14 +67,11 @@ def RGB2HSV(r, g, b):
     return h, s, v
 
 def calculate_similarity(hist1, hist2):
-    product = np.dot(hist1, hist2)
-    norm1 = np.linalg.norm(hist1)
-    norm2 = np.linalg.norm(hist2)
-    similarity = (product / (norm1 * norm2)) * 100
-    return similarity
+    return np.dot(hist1, hist2) / (np.linalg.norm(hist1) * np.linalg.norm(hist2)) * 100
+
 
 def histogram_array(img,hists):
-    warnings.filterwarnings("ignore", category=RuntimeWarning, message="invalid value encountered in divide")
+    
     height, width, _ = img.shape
 
     grid_height = height // 3
@@ -134,18 +133,14 @@ def Cbir_Color1(cache):
                         
                     caches.input_to_csv(cache, [caches.hash_file(image_path), caches.np_to_list(histogram)])
                 
-                if folder == DATASET_FOLDER:
-                    if type(histogram1) != list:
-                        histogram1 = caches.np_to_list(histogram1)
-                    if type(histogram2) != list:
-                        histogram2 = caches.np_to_list(histogram2)
-                    
+                if folder == DATASET_FOLDER:                  
                     similarity = calculate_similarity(histogram1, histogram2)
                     if similarity > 60:
                         similarity_arr.append({
                             "url": os.path.basename(image_path),
                             "percentage": round(similarity)
                         })
+                        
                         
     similarity_arr = sorted(similarity_arr, key=lambda k: float(k["percentage"]) if isinstance(k["percentage"], (int, float, complex)) else 0, reverse=True)
     caches.array_to_csv(cache)
