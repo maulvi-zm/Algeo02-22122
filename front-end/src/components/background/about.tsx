@@ -4,15 +4,15 @@ function AboutBG() {
   return (
     <svg
       width='1440'
-      height='1500'
-      viewBox='0 0 1440 1500'
+      height='1200'
+      viewBox='0 0 1440 1200'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
       xmlnsXlink='http://www.w3.org/1999/xlink'
     >
       <g clipPath='url(#clip0_1_19)'>
-        <rect width='1440' height='1500' fill='white' />
-        <rect width='1440' height='1500' fill='url(#pattern0)' />
+        <rect width='1440' height='1200' fill='white' />
+        <rect width='1440' height='1200' fill='url(#pattern0)' />
       </g>
       <defs>
         <pattern
@@ -27,7 +27,7 @@ function AboutBG() {
           />
         </pattern>
         <clipPath id='clip0_1_19'>
-          <rect width='1440' height='1500' fill='white' />
+          <rect width='1440' height='1200' fill='white' />
         </clipPath>
         <image
           id='image0_1_19'
