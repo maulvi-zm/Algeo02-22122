@@ -1,4 +1,5 @@
-from fastapi import FastAPI, UploadFile, File, Response, Form
+from fastapi import FastAPI, UploadFile, File, Response, Form, BackgroundTasks
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from fastapi.staticfiles import StaticFiles
@@ -13,6 +14,7 @@ from CBIR_NonMultiprocess import Cbir_Color1
 import caches2
 from multiprocessing import Lock
 from texture import Texture
+
 
 UPLOAD_DIR_SEARCH = Path() / "uploads/search"
 UPLOAD_DIR_DATA= Path() / "uploads/data-set"
@@ -102,14 +104,14 @@ async def scrape_images(link: str = Form(...)):
 
 
 @app.get("/get-result-color")
-async def send_result_color():
+async def send_result_color(background_tasks: BackgroundTasks):
     
     if len(os.listdir(UPLOAD_DIR_DATA)) > 500:
         similarity_arr, time = Cbir_Color2(cache=cache2,cache_lock=cache_lock)
     else :
         similarity_arr, time = Cbir_Color1(cache=cache1)
     
-    make_pdf(similarity_arr=similarity_arr, time=time)
+    background_tasks.add_task(make_pdf, similarity_arr, time)
     
     image_objects = []
     for item in similarity_arr:
@@ -123,11 +125,11 @@ async def send_result_color():
         "time": time,
     }
 @app.get("/get-result-texture")
-async def send_resul_texture():
+async def send_resul_texture(background_tasks: BackgroundTasks):
     
     similarity_arr, time = Texture(cachetexture)
 
-    make_pdf(similarity_arr=similarity_arr, time=time)
+    background_tasks.add_task(make_pdf, similarity_arr, time)
     
     image_objects = []
     for item in similarity_arr:
@@ -142,15 +144,10 @@ async def send_resul_texture():
     }
 
 @app.get("/download_pdf")
-async def download_pdf(response: Response):
-    
-    response.headers["Content-Disposition"] = "attachment; filename=pdfOutput.pdf"
-    response.headers["Content-Type"] = "application/pdf"
+async def download_pdf():
 
-    if os.path.exists("template-output.pdf"):
-        with open("template-output.pdf", "rb") as pdf:
-            response.body = pdf.read()
-            return response
+    if os.path.exists("./template-output.pdf"):
+        return FileResponse("./template-output.pdf", headers={"Content-Disposition": "attachment; filename=pdfOutput.pdf"})
     else:
         return {"message": "PDF not found"}
         
@@ -158,14 +155,13 @@ async def download_pdf(response: Response):
 def delete_dataset():
     for file in os.listdir(UPLOAD_DIR_DATA):
         os.remove(UPLOAD_DIR_DATA / file)
-        
     return {"message": "Data-set deleted"}
 
 def delete_search():
     for file in os.listdir(UPLOAD_DIR_SEARCH):
         os.remove(UPLOAD_DIR_SEARCH / file)
-        
     return {"message": "Search deleted"}
+
 
 async def make_pdf(similarity_arr, time):
     export_pdf(similarity_arr=similarity_arr, time=time)
