@@ -1,5 +1,6 @@
 import Camera1 from "@/assets/images/camera.png";
 import Camera2 from "@/assets/images/camera2.png";
+import Question from "@/assets/images/question.png";
 import Image from "next/image";
 import RainbowTitle from "@/components/ui/rainbow-title";
 import Glass from "@/components/ui/glassmorphism";
@@ -67,6 +68,53 @@ export default function Home() {
               deeper into the intricate intersection of mathematics and modern
               image processing technologies.
             </p>
+          </div>
+        </Glass>
+      </div>
+
+      <div className='flex flex-col'>
+        <RainbowTitle title='How To Use' reversed />
+        <Glass className='flex flex-row items-center'>
+          <div className='text-[#292B48] flex-1 font-medium w-[50%]'>
+            <p className='w-full bg-white/80 rounded-xl p-10 border-2 border-white space-y-4'>
+              <span className='text-[20px] font-semibold'>
+                #Search image using another image.
+              </span>
+              <span>
+                Step 1 Insert query images: Start by pressing upload button in
+                Image Input secton. This image wil be the main image that will
+                be compared against our dataset.{" "}
+              </span>
+              <span>
+                Step 2 Insert data-set Press upload button and select the folder
+                that has the data-set you prepared All set ! Now choose between
+                color or texture method of search.{" "}
+              </span>
+              <span className='text-[20px] font-semibold'>
+                {" "}
+                #Search image using real-time camera.{" "}
+              </span>{" "}
+              <span>
+                Step 1 Get ready infront of your camera. Wait for the first 5
+                seconds, this range of time for you upload your data-set. After
+                that wait for 5 seconds, and.. photo captured. The photo will be
+                the query images.{" "}
+              </span>
+              <span>
+                Step 2 Upload data-set. If you haven't uploaded your data-set
+                yet in the first 5 seconds, you can upload your data-set. Fast!
+                Before your photo uploaded again. The result will be
+                automatically updated every times your photo captured.
+              </span>
+            </p>
+          </div>
+          <div className='h-full'>
+            <Image
+              src={Question}
+              alt='camera'
+              width={500}
+              className='object-contain'
+            />
           </div>
         </Glass>
       </div>

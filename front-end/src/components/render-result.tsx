@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import { JsonData } from "./result";
 import Pagination from "./pagination";
+import { time } from "console";
 
 function RenderResult({ data }: { data: JsonData }) {
   const [currentPage, setCurrentPage] = React.useState<number>(1);
@@ -37,7 +38,7 @@ function RenderResult({ data }: { data: JsonData }) {
   return (
     <>
       <div className='h-[300px]'>
-        {length > 0 ? (
+        {data.time > 0 ? (
           <div className='grid grid-cols-3 min-h-[300px] h-auto gap-6'>
             {slicedData.map((file, idx) => (
               <div className='flex flex-col w-full h-full' key={idx}>
@@ -58,7 +59,7 @@ function RenderResult({ data }: { data: JsonData }) {
           </div>
         ) : (
           <div className='w-full h-full flex items-center justify-center text-center font-semibold text-[24px]'>
-            No selected data-set
+            No Result
           </div>
         )}
       </div>

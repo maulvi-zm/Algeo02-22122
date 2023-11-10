@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, Response, BackgroundTasks
+from fastapi import FastAPI, UploadFile, File, Response, Form, BackgroundTasks
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
@@ -53,7 +53,7 @@ async def create_upload_file(file_uploads: list[UploadFile]):
     delete_dataset()
     for file_upload in file_uploads:
         contents = await file_upload.read()
-        save_path = UPLOAD_DIR_DATA / file_upload.filename
+        save_path = UPLOAD_DIR_DATA / file_upload.filename.split("/")[-1]
         with open(save_path, "wb") as f:
             f.write(contents)
         
@@ -71,8 +71,8 @@ async def receive_image(file: UploadFile = File(...)):
     return {"message": "Image received and processed"}
 
 
-@app.get("/scrape")
-async def scrape_images(link: str):
+@app.post("/scrape")
+async def scrape_images(link: str = Form(...)):
     delete_dataset()
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36","Accept-Language": "en-US,en;q=0.5",}
     response = requests.get(url=link, headers=headers)
