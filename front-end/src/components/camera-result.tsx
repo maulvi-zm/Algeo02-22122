@@ -19,7 +19,7 @@ export interface JsonData {
 
 const initialData: JsonData = {
   data: [],
-  time: 0,
+  time: -1,
 };
 
 const texture: string = "http://localhost:8000/get-result-texture";

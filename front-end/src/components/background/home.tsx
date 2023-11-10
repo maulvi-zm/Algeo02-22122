@@ -5,10 +5,10 @@ function HomeBG() {
     <div className='absolute -z-10 top-0 left-0 -translate-x-[7.7%] -translate-y-[15%] w-full h-full'>
       <svg
         width='1440'
-        height='1500'
-        viewBox='0 0 1440 1500'
+        height='2300'
+        viewBox='0 0 1440 2300'
         fill='none'
-        xmlns='http://www.w3.org/2000/svg'
+        xmlns='http://www.w3.org/2300/svg'
         xmlnsXlink='http://www.w3.org/1999/xlink'
       >
         <rect y='348' width='1440' height='1480' fill='url(#pattern0)' />

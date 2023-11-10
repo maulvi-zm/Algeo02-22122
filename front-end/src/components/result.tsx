@@ -19,7 +19,7 @@ export interface JsonData {
 
 const initialData: JsonData = {
   data: [],
-  time: 0,
+  time: -1,
 };
 
 const texture: string = "http://localhost:8000/get-result-texture";
@@ -71,7 +71,7 @@ function Results() {
       <div className='w-[80%]'>
         <div className='w-full flex justify-between'>
           <RainbowTitle title='Result' />
-          {length > 0 && (
+          {resultData.time != -1 && (
             <RainbowTitle
               title={`${length} result in ${resultData.time.toFixed(
                 2
@@ -81,13 +81,18 @@ function Results() {
         </div>
 
         <Glass className='space-y-8'>
-          <div className='flex items-center gap-4'>
-            <div className='p-[12px] bg-white rounded-lg flex items-center gap-2'>
-              <p>Color</p>
-              <Switch onClick={handleClick} />
-              <p>Texture</p>
+          <div className='flex gap-4 justify-between'>
+            <div className='space-x-4 flex items-center'>
+              <div className='p-[12px] bg-white rounded-lg flex items-center gap-2'>
+                <p>Color</p>
+                <Switch onClick={handleClick} />
+                <p>Texture</p>
+              </div>
+              <Button onClick={fetchData}>Search</Button>
             </div>
-            <Button onClick={fetchData}>Search</Button>
+            <Button>
+              <a href='http://localhost:8000/download_pdf'>Download PDF</a>
+            </Button>
           </div>
 
           {Load ? <Loading /> : <RenderResult data={resultData} />}
