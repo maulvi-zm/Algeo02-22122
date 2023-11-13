@@ -132,7 +132,6 @@ def Cbir_Color(cache):
     cache_lock.release()
     caches2.dict_to_json(cache, "./caches/data.json")
     execution_time = time.time() - program_time
-    print(similarity_arr)
     return similarity_arr, execution_time
 
 if __name__ == "__main__":

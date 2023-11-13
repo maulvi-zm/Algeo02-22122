@@ -1,6 +1,6 @@
 import glob
 import time
-import caches
+import caches2
 import os
 import cv2
 import numpy as np
@@ -95,14 +95,12 @@ def Cbir_Color1(cache):
         for image_path in sorted(image_files):
             if os.path.isfile(image_path):
                 
-                # Check Caches
-                found, index = caches.cek_cache(cache, image_path)
-                
-                if found:
+                temp = cache.get(f'{caches2.hash_file(image_path)}')
+                if temp is not None:
                     if folder == INPUT_FOLDER:
-                        histogram1 = cache[index][1]
+                        histogram1 = temp
                     else:
-                        histogram2 = cache[index][1]
+                        histogram2 = temp
                 else:
                     img = cv2.imread(str(image_path))
 
@@ -116,7 +114,7 @@ def Cbir_Color1(cache):
                     else:
                         histogram2 = histogram
                         
-                    caches.input_to_csv(cache, [caches.hash_file(image_path), caches.np_to_list(histogram)])
+                    caches2.input_to_csv(cache, [caches2.hash_file(image_path), caches2.np_to_list(histogram)])
                 
                 if folder == DATASET_FOLDER:                  
                     similarity = calculate_similarity(histogram1, histogram2)
@@ -128,13 +126,13 @@ def Cbir_Color1(cache):
                         
                         
     similarity_arr = sorted(similarity_arr, key=lambda k: float(k["percentage"]) if isinstance(k["percentage"], (int, float, complex)) else 0, reverse=True)
-    caches.array_to_csv(cache)
+    caches2.dict_to_json(cache, "./caches/data.json")
     execution_time = time.time() - program_time
     return similarity_arr, execution_time
 
 
 if __name__ == "__main__":
-    cache = caches.csv_to_array()
+    cache = caches2.json_to_dict("./caches/data.json")
     cProfile.run("Cbir_Color1(cache)", "my_func_stats")
     p = pstats.Stats("my_func_stats")
     p.sort_stats("cumulative").print_stats()
