@@ -61,41 +61,65 @@ function CBIR() {
     }
   }
 
+  function handleInputType() {
+    for (let i = 0; i < selectedData.length; i++) {
+      const file = selectedData[i];
+
+      // Check if the file type is an image
+      if (!file.type.startsWith("image/")) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   const submitData = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData();
+    if (!handleInputType()) {
+      toast({
+        title: "Invalid File Type!",
+        description: "Please upload only images.",
+        variant: "destructive",
+      });
+      return;
+    } else {
+      const formData = new FormData();
 
-    selectedData.forEach((file) => {
-      formData.append("file_uploads", file);
-    });
-
-    try {
-      const endPoint = "http://localhost:8000/uploaddata/"; //isi sesuai endpoint back end
-      const res = await fetch(endPoint, {
-        method: "POST",
-        body: formData,
+      selectedData.forEach((file) => {
+        formData.append("file_uploads", file);
       });
 
-      if (res.ok) {
-        toast({
-          title: "File Submitted Successfully!",
-          description: "Please continue to next section to see the results",
-          variant: "success",
+      console.log(selectedData);
+
+      try {
+        const endPoint = "http://localhost:8000/uploaddata/"; //isi sesuai endpoint back end
+        const res = await fetch(endPoint, {
+          method: "POST",
+          body: formData,
         });
-      } else {
+
+        if (res.ok) {
+          toast({
+            title: "File Submitted Successfully!",
+            description: "Please continue to next section to see the results",
+            variant: "success",
+          });
+        } else {
+          toast({
+            title: "Something Went Wrong!",
+            description: "Please try again later",
+            variant: "destructive",
+          });
+        }
+      } catch (err) {
         toast({
           title: "Something Went Wrong!",
           description: "Please try again later",
           variant: "destructive",
         });
       }
-    } catch (err) {
-      toast({
-        title: "Something Went Wrong!",
-        description: "Please try again later",
-        variant: "destructive",
-      });
     }
   };
 
