@@ -41,6 +41,7 @@ function ImageInput({
             placeholder='Username'
             onChange={handleChange}
             className='z-10'
+            accept='image/*'
           />
           <Button
             type='submit'

@@ -95,7 +95,7 @@ async def scrape_images(link: str = Form(...)):
                 if img_response.status_code == 200:
                     with open(os.path.join(UPLOAD_DIR_DATA, f"{index}.jpg"), 'wb') as f:
                         f.write(img_response.content)
-                        arr_responses.append({"url": f"127.0.0.1:8000/uploads/data-set/{index}.jpg"})
+                        arr_responses.append({"url": f"http://localhost:8000/uploads/data-set/{index}.jpg"})
                 responses["data"] = arr_responses
     else:
         return {"message": "failed to scrape images"}
@@ -109,7 +109,7 @@ async def send_result_color(background_tasks: BackgroundTasks):
     if len(os.listdir(UPLOAD_DIR_DATA)) > 500:
         similarity_arr, time = Cbir_Color2(cache=cache2,cache_lock=cache_lock)
     else :
-        similarity_arr, time = Cbir_Color1(cache=cache1)
+        similarity_arr, time = Cbir_Color1(cache=cache2)
     
     background_tasks.add_task(make_pdf, similarity_arr, time)
     

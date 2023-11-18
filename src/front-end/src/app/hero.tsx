@@ -12,7 +12,6 @@ function Hero() {
   return (
     <>
       <div className='w-full flex flex-col min-h-[680px] justify-center'>
-        {/* bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-rose-400 via-fuchsia-500 to-indigo-500 bg-clip-text text-transparent  */}
         <AnimatedText>
           <p className='font-bold text-[72px] -translate-y-20'>smiLens.</p>
         </AnimatedText>

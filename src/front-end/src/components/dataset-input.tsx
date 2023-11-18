@@ -128,6 +128,7 @@ function DatasetInput({
                       );
                     }
                   }}
+                  accept='image/*'
                 />
                 <Button
                   type='submit'

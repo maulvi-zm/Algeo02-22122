@@ -6,8 +6,8 @@ export default function CbirLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24 overflow-hidden'>
-      <div className='absolute -z-10 top-0 left-0 overflow-hidden'>
+    <main className='flex w-full min-h-screen flex-col items-center justify-between p-24 overflow-hidden'>
+      <div className='absolute -z-10 top-0 left-0 -translate-x-[10%]'>
         <AboutBG />
       </div>
       {children}

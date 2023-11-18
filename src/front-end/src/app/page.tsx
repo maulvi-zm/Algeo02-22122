@@ -23,9 +23,9 @@ export default function Home() {
               <span className='underline font-semibold decoration-pink-500 decoration-2 underline-offset-2'>
                 Content-Based Image Retrieval (CBIR)
               </span>{" "}
-              using matrices and vectors. With the provided image datasets, I am
-              tasked with developing a system that can retrieve images based on
-              their{" "}
+              using matrices and vectors. With the provided image datasets, We
+              are tasked with developing a system that can retrieve images based
+              on their{" "}
               <span className='underline font-semibold decoration-sky-500 decoration-2 underline-offset-2'>
                 texture or color features
               </span>
@@ -59,14 +59,13 @@ export default function Home() {
           </div>
           <div className='text-[#292B48] flex-1 font-medium w-[50%]'>
             <p className='w-full bg-white/80 rounded-xl p-10 border-2 border-white'>
-              Through this project, we aim to develop an efficient image
-              retrieval system using the principles of linear algebra and
-              geometry. By harnessing the power of matrices and vectors, we
-              endeavor to create a platform that can accurately retrieve images
-              based on their distinctive texture and color attributes. "smiLens"
-              serves as a challenging yet enlightening opportunity to delve
-              deeper into the intricate intersection of mathematics and modern
-              image processing technologies.
+              In the "smiLens" project, we're developing an efficient image
+              retrieval system using linear algebra and geometry. This project
+              also expanded our knowledge in both front end and back end
+              development, exploring user interface design with HTML, CSS, and
+              TypeScript, and learning back-end using python. "SmiLens" serves
+              as a valuable learning experience in mathematics, image
+              processing, and full-stack application development.
             </p>
           </div>
         </Glass>
@@ -75,37 +74,35 @@ export default function Home() {
       <div className='flex flex-col'>
         <RainbowTitle title='How To Use' reversed />
         <Glass className='flex flex-row items-center'>
-          <div className='text-[#292B48] flex-1 font-medium w-[50%]'>
-            <p className='w-full bg-white/80 rounded-xl p-10 border-2 border-white space-y-4'>
-              <span className='text-[20px] font-semibold'>
-                #Search image using another image.
-              </span>
-              <span>
-                Step 1 Insert query images: Start by pressing upload button in
-                Image Input secton. This image wil be the main image that will
-                be compared against our dataset.{" "}
-              </span>
-              <span>
-                Step 2 Insert data-set Press upload button and select the folder
-                that has the data-set you prepared All set ! Now choose between
-                color or texture method of search.{" "}
-              </span>
-              <span className='text-[20px] font-semibold'>
-                {" "}
-                #Search image using real-time camera.{" "}
-              </span>{" "}
-              <span>
-                Step 1 Get ready infront of your camera. Wait for the first 5
-                seconds, this range of time for you upload your data-set. After
-                that wait for 5 seconds, and.. photo captured. The photo will be
-                the query images.{" "}
-              </span>
-              <span>
-                Step 2 Upload data-set. If you haven't uploaded your data-set
-                yet in the first 5 seconds, you can upload your data-set. Fast!
-                Before your photo uploaded again. The result will be
-                automatically updated every times your photo captured.
-              </span>
+          <div className='text-[#292B48] flex-1 font-medium w-[50%] bg-white/80 rounded-xl p-10 border-2 border-white space-y-4'>
+            <p className='text-[20px] font-semibold'>
+              #Search image using another image.
+            </p>
+            <p>
+              Step 1 Insert query images: Start by pressing upload button in
+              Image Input secton. This image wil be the main image that will be
+              compared against our dataset.{" "}
+            </p>
+            <p>
+              Step 2 Insert data-set Press upload button and select the folder
+              that has the data-set you prepared All set ! Now choose between
+              color or texture method of search.{" "}
+            </p>
+            <p className='text-[20px] font-semibold'>
+              {" "}
+              #Search image using real-time camera.{" "}
+            </p>{" "}
+            <p>
+              Step 1 Get ready infront of your camera. Wait for the first 5
+              seconds, this range of time for you upload your data-set. After
+              that wait for 5 seconds, and.. photo captured. The photo will be
+              the query images.{" "}
+            </p>
+            <p>
+              Step 2 Upload data-set. If you haven't uploaded your data-set yet
+              in the first 5 seconds, you can upload your data-set. Fast! Before
+              your photo uploaded again. The result will be automatically
+              updated every times your photo captured.
             </p>
           </div>
           <div className='h-full'>

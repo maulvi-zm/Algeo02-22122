@@ -3,16 +3,16 @@ import React from "react";
 function AboutBG() {
   return (
     <svg
-      width='1440'
+      width='1720'
       height='1200'
-      viewBox='0 0 1440 1200'
+      viewBox='0 0 1720 1200'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
       xmlnsXlink='http://www.w3.org/1999/xlink'
     >
-      <g clipPath='url(#clip0_1_19)'>
-        <rect width='1440' height='1200' fill='white' />
-        <rect width='1440' height='1200' fill='url(#pattern0)' />
+      <g clip-path='url(#clip0_1_19)'>
+        <rect width='1720' height='1200' fill='white' />
+        <rect width='1720' height='1200' fill='url(#pattern0)' />
       </g>
       <defs>
         <pattern
@@ -23,11 +23,11 @@ function AboutBG() {
         >
           <use
             xlinkHref='#image0_1_19'
-            transform='matrix(0.000339084 0 0 0.000244141 -0.194444 0)'
+            transform='matrix(0.000360391 0 0 0.000244141 -0.238081 0)'
           />
         </pattern>
         <clipPath id='clip0_1_19'>
-          <rect width='1440' height='1200' fill='white' />
+          <rect width='1720' height='2539' fill='white' />
         </clipPath>
         <image
           id='image0_1_19'

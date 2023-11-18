@@ -1,8 +1,9 @@
+"use client";
+
 import React from "react";
 import RainbowTitle from "./ui/rainbow-title";
 import Glass from "./ui/glassmorphism";
 import RenderResult from "./render-result";
-import { Button } from "./ui/button";
 import Loading from "./ui/loading";
 import { Switch } from "./ui/switch";
 import { useToast } from "./ui/use-toast";
@@ -65,18 +66,12 @@ function CameraResult() {
     }
   };
 
-  // Function to fetch data initially and set up the interval
-  const startFetchingData = () => {
-    fetchData(); // Fetch data initially
-    const intervalId = setInterval(fetchData, 6000); // Fetch data every 6 seconds
-
-    // Cleanup function to clear the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  };
-
-  // Use useEffect to start fetching data when the component mounts
   React.useEffect(() => {
-    startFetchingData();
+    const intervalId = setInterval(fetchData, 6000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (

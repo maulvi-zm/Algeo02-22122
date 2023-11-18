@@ -109,7 +109,7 @@ INPUT_FOLDER = "./uploads/search"
 DATASET_FOLDER = "./uploads/data-set"
 
 
-def Cbir_Color(cache):
+def Cbir_Color2(cache):
     
     program_time = time.time()
     similarity_arr = []

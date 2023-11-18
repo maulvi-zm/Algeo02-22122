@@ -1,14 +1,14 @@
 function CameraBG() {
   return (
     <svg
-      width='1440'
-      height='2000'
-      viewBox='0 0 1440 2000'
+      width='1720'
+      height='2300'
+      viewBox='0 0 1720 2300'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
       xmlnsXlink='http://www.w3.org/1999/xlink'
     >
-      <rect width='1440' height='2000' fill='url(#pattern0)' />
+      <rect width='1720' height='2300' fill='url(#pattern0)' />
       <defs>
         <pattern
           id='pattern0'
@@ -18,7 +18,7 @@ function CameraBG() {
         >
           <use
             xlinkHref='#image0_5_2'
-            transform='matrix(0.000339084 0 0 0.000244141 -0.194444 0)'
+            transform='matrix(0.000326467 0 0 0.000244141 -0.168605 0)'
           />
         </pattern>
         <image

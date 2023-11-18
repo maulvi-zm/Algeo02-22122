@@ -89,13 +89,16 @@ DATASET_FOLDER = "./uploads/data-set"
 def Cbir_Color1(cache):
     program_time = time.time()
     similarity_arr = []
+    
+    cache_updates = {} 
 
     for folder in [INPUT_FOLDER, DATASET_FOLDER]:
         image_files = glob.glob(os.path.join(folder, '*.jpg'))
         for image_path in sorted(image_files):
             if os.path.isfile(image_path):
                 
-                temp = cache.get(f'{caches2.hash_file(image_path)}')
+                hashes = caches2.hash_file(image_path)
+                temp = cache.get(f'{hashes}')
                 if temp is not None:
                     if folder == INPUT_FOLDER:
                         histogram1 = temp
@@ -114,7 +117,7 @@ def Cbir_Color1(cache):
                     else:
                         histogram2 = histogram
                         
-                    caches2.input_to_csv(cache, [caches2.hash_file(image_path), caches2.np_to_list(histogram)])
+                    cache_updates[f'{hashes}'] = histogram
                 
                 if folder == DATASET_FOLDER:                  
                     similarity = calculate_similarity(histogram1, histogram2)
@@ -124,7 +127,7 @@ def Cbir_Color1(cache):
                             "percentage": round(similarity)
                         })
                         
-                        
+    cache.update(cache_updates)
     similarity_arr = sorted(similarity_arr, key=lambda k: float(k["percentage"]) if isinstance(k["percentage"], (int, float, complex)) else 0, reverse=True)
     caches2.dict_to_json(cache, "./caches/data.json")
     execution_time = time.time() - program_time

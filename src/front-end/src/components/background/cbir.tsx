@@ -3,16 +3,16 @@ import React from "react";
 function CbirBG() {
   return (
     <svg
-      width='1440'
-      height='2000'
-      viewBox='0 0 1440 2000'
+      width='1720'
+      height='2300'
+      viewBox='0 0 1720 2300'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
       xmlnsXlink='http://www.w3.org/1999/xlink'
     >
       <g clip-path='url(#clip0_6_3)'>
-        <rect width='1440' height='2000' fill='white' />
-        <rect width='1440' height='2000' fill='url(#pattern0)' />
+        <rect width='1720' height='2300' fill='white' />
+        <rect width='1720' height='2300' fill='url(#pattern0)' />
       </g>
       <defs>
         <pattern
@@ -23,11 +23,11 @@ function CbirBG() {
         >
           <use
             xlinkHref='#image0_6_3'
-            transform='matrix(0.000339084 0 0 0.000244141 -0.194444 0)'
+            transform='matrix(0.000326467 0 0 0.000244141 -0.168605 0)'
           />
         </pattern>
         <clipPath id='clip0_6_3'>
-          <rect width='1440' height='2000' fill='white' />
+          <rect width='1720' height='2300' fill='white' />
         </clipPath>
         <image
           id='image0_6_3'

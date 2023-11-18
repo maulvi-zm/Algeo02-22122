@@ -43,7 +43,7 @@ function About() {
       <Glass className='flex flex-row-reverse justify-between'>
         <div className='w-[60%]'>
           <p className='text-[32px] font-bold'>Muhammad Fauzan Azhim</p>
-          <p className='text-[24px]'>13522122</p>
+          <p className='text-[24px]'>13522153</p>
           <p className='my-10 leading-relaxed'>
             Hello! I'm Fauzan, a{" "}
             <span className='underline font-semibold decoration-pink-500 decoration-2 underline-offset-2'>

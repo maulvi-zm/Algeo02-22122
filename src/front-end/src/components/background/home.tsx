@@ -5,16 +5,16 @@ function HomeBG() {
     <div className='absolute -z-10 top-0 left-0 -translate-x-[7.7%] -translate-y-[15%] w-full h-full'>
       <svg
         width='1440'
-        height='2300'
-        viewBox='0 0 1440 2300'
+        height='2376'
+        viewBox='0 0 1440 2376'
         fill='none'
-        xmlns='http://www.w3.org/2300/svg'
+        xmlns='http://www.w3.org/2000/svg'
         xmlnsXlink='http://www.w3.org/1999/xlink'
       >
-        <rect y='348' width='1440' height='1480' fill='url(#pattern0)' />
+        <rect y='197' width='1440' height='2179' fill='url(#pattern0)' />
         <g filter='url(#filter0_f_0_1)'>
           <rect
-            x='-118'
+            x='-91'
             y='100'
             width='1622'
             height='393'
@@ -30,19 +30,19 @@ function HomeBG() {
           >
             <use
               xlinkHref='#image0_0_1'
-              transform='matrix(0.00044686 0 0 0.000434783 -0.0138889 0)'
+              transform='matrix(0.000657911 0 0 0.000434783 -0.256597 0)'
             />
           </pattern>
           <filter
             id='filter0_f_0_1'
-            x='-218'
+            x='-191'
             y='0'
             width='1822'
             height='593'
             filterUnits='userSpaceOnUse'
-            colorInterpolationFilters='sRGB'
+            color-interpolation-filters='sRGB'
           >
-            <feFlood floodOpacity='0' result='BackgroundImageFix' />
+            <feFlood flood-opacity='0' result='BackgroundImageFix' />
             <feBlend
               mode='normal'
               in='SourceGraphic'
