@@ -7,6 +7,7 @@ import RenderResult from "./render-result";
 import Loading from "./ui/loading";
 import { Switch } from "./ui/switch";
 import { useToast } from "./ui/use-toast";
+import { clear } from "console";
 
 export interface ImageData {
   url: string;
@@ -67,9 +68,14 @@ function CameraResult() {
   };
 
   React.useEffect(() => {
-    const intervalId = setInterval(fetchData, 6000);
+    let intervalId: NodeJS.Timeout;
+
+    const delayTimeout = setTimeout(() => {
+      intervalId = setInterval(fetchData, 6000);
+    }, 8000);
 
     return () => {
+      clearTimeout(delayTimeout);
       clearInterval(intervalId);
     };
   }, []);

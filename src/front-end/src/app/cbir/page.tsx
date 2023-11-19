@@ -65,8 +65,7 @@ function CBIR() {
     for (let i = 0; i < selectedData.length; i++) {
       const file = selectedData[i];
 
-      // Check if the file type is an image
-      if (!file.type.startsWith("image/")) {
+      if (!file.type.startsWith("image/") && file.name != ".DS_Store") {
         return false;
       }
     }
@@ -83,7 +82,6 @@ function CBIR() {
         description: "Please upload only images.",
         variant: "destructive",
       });
-      return;
     } else {
       const formData = new FormData();
 

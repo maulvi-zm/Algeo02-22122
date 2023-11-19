@@ -10,7 +10,7 @@ function AboutBG() {
       xmlns='http://www.w3.org/2000/svg'
       xmlnsXlink='http://www.w3.org/1999/xlink'
     >
-      <g clip-path='url(#clip0_1_19)'>
+      <g clipPath='url(#clip0_1_19)'>
         <rect width='1720' height='1200' fill='white' />
         <rect width='1720' height='1200' fill='url(#pattern0)' />
       </g>

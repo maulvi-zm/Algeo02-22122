@@ -10,7 +10,7 @@ function CbirBG() {
       xmlns='http://www.w3.org/2000/svg'
       xmlnsXlink='http://www.w3.org/1999/xlink'
     >
-      <g clip-path='url(#clip0_6_3)'>
+      <g clipPath='url(#clip0_6_3)'>
         <rect width='1720' height='2300' fill='white' />
         <rect width='1720' height='2300' fill='url(#pattern0)' />
       </g>

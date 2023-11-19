@@ -22,7 +22,7 @@ function About() {
             digital experiences. Currently, I'm expanding my skills into
             full-stack development, exploring the intricacies of back-end
             programming and databases.{" "}
-            <p className='mt-4'>
+            <span className='mt-4'>
               {" "}
               Check out my portofolio at{" "}
               <a
@@ -32,7 +32,7 @@ function About() {
               >
                 maulvi-zm.github.io
               </a>
-            </p>
+            </span>
           </p>
         </div>
         <div className='rounded-full overflow-hidden w-[300px] flex items-center h-full m-auto'>
