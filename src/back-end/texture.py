@@ -34,21 +34,16 @@ def GLCM(grayscale_matrix, angle=0):
     # Convert the grayscale matrix to a NumPy array
     grayscale_array = np.array(grayscale_matrix, dtype=np.uint8)
 
-    height = width = 256
+    height, width = grayscale_array.shape  # Get the actual dimensions of the image
 
-    # Initialize the GLCM matrix
-    glcm = np.zeros((height, width), dtype=np.uint32)
+    # Initialize the GLCM matrix with fixed size 256x256
+    glcm = np.zeros((256, 256), dtype=np.uint32)
 
     # Calculate the indices of the current pixels and the neighbor pixels
-    current_indices = (np.arange(height), np.arange(width))
-    neighbor_indices = (np.arange(height) + 0, np.arange(width) + 1)
-
-    # Get the current pixels and the neighbor pixels
-    current_pixels = grayscale_array[current_indices]
-    neighbor_pixels = grayscale_array[neighbor_indices]
+    current_indices = (grayscale_array[:-1, :].ravel(), grayscale_array[1:, :].ravel())
 
     # Increment the corresponding GLCM elements
-    np.add.at(glcm, (current_pixels, neighbor_pixels), 1)
+    np.add.at(glcm, current_indices, 1)
 
     return glcm
 

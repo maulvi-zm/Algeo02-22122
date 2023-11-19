@@ -85,7 +85,7 @@ function CameraResult() {
       <div className='w-[80%]'>
         <div className='w-full flex justify-between'>
           <RainbowTitle title='Result' />
-          {length > 0 && (
+          {resultData.time != -1 && (
             <RainbowTitle
               title={`${length} result in ${resultData.time.toFixed(
                 2

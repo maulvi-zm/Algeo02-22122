@@ -38,7 +38,7 @@ function RenderResult({ data }: { data: JsonData }) {
   return (
     <>
       <div className='h-[300px]'>
-        {data.time > 0 ? (
+        {data.time > 0 && data.data.length > 0 ? (
           <div className='grid grid-cols-3 min-h-[300px] h-auto gap-6'>
             {slicedData.map((file, idx) => (
               <div className='flex flex-col w-full h-full' key={idx}>
