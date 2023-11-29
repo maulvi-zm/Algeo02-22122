@@ -17,14 +17,14 @@
   <p align="center">
     Website Image search using image by color and texture similarity
     <br />
-    <a href="https://github.com/maulvi-zm/IF2121_TB_02"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/maulvi-zm/Algeo02-22122"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/maulvi-zm/IF2121_TB_02">View Demo</a>
+    <a href="https://github.com/maulvi-zm/Algeo02-22122">View Demo</a>
     ·
-    <a href="https://github.com/maulvi-zm/IF2121_TB_02/issues">Report Bug</a>
+    <a href="https://github.com/maulvi-zm/Algeo02-22122/issues">Report Bug</a>
     ·
-    <a href="https://github.com/maulvi-zm/IF2121_TB_02/issues">Request Feature</a>
+    <a href="https://github.com/maulvi-zm/Algeo02-22122/issues">Request Feature</a>
   </p>
 </div>
 
@@ -135,7 +135,7 @@ To start this app you need to install NodeJS and Python3 on your computer. You c
 <!-- CONTACT -->
 ## Contact
 
-Project Link: [https://github.com/maulvi-zm/IF2121_TB_02](https://github.com/maulvi-zm/IF2121_TB_02)
+Project Link: [https://github.com/maulvi-zm/Algeo02-22122](https://github.com/maulvi-zm/Algeo02-22122)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -153,12 +153,12 @@ Project Link: [https://github.com/maulvi-zm/IF2121_TB_02](https://github.com/mau
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/fauzanazz/IF2110_TB_03_B.svg?style=for-the-badge
-[contributors-url]: https://github.com/maulvi-zm/IF2121_TB_02/graphs/contributors
+[contributors-url]: https://github.com/maulvi-zm/Algeo02-22122/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/fauzanazz/IF2110_TB_03_B.svg?style=for-the-badge
-[forks-url]: https://github.com/maulvi-zm/IF2121_TB_02/network/members
+[forks-url]: https://github.com/maulvi-zm/Algeo02-22122/network/members
 [stars-shield]: https://img.shields.io/github/stars/fauzanazz/IF2110_TB_03_B.svg?style=for-the-badge
-[stars-url]: https://github.com/maulvi-zm/IF2121_TB_02/stargazers
+[stars-url]: https://github.com/maulvi-zm/Algeo02-22122/stargazers
 [issues-shield]: https://img.shields.io/github/issues/fauzanazz/IF2110_TB_03_B.svg?style=for-the-badge
-[issues-url]: https://github.com/maulvi-zm/IF2121_TB_02/issues
+[issues-url]: https://github.com/maulvi-zm/Algeo02-22122/issues
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
